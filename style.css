@@ -116,6 +116,55 @@ body {
     transform: scale(0.95);
 }
 
+/* GitHub Star 按钮 */
+.github-star-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-right: 8px;
+}
+
+.github-star-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.github-star-btn:active {
+    transform: scale(0.95);
+}
+
+.github-star-btn svg {
+    transition: all 0.2s ease;
+}
+
+.github-star-btn:hover svg {
+    fill: var(--accent-color);
+}
+
+/* GitHub Star 链接样式 */
+.github-star-link {
+    display: flex;
+    align-items: center;
+    height: 28px; /* 与toolbar-btn的高度保持一致 */
+    margin-right: 8px;
+    text-decoration: none;
+}
+
+.github-star-link img {
+    height: 20px;
+    vertical-align: middle;
+}
+
 .toolbar-divider {
     width: 1px;
     height: 20px;
