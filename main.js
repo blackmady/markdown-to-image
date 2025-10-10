@@ -304,12 +304,13 @@ class MarkdownEditor {
         const exportDropdown = exportBtn.parentElement
         const exportMenu = exportDropdown.querySelector('.export-menu')
         
-        exportBtn.addEventListener('click', (e) => {
-            e.stopPropagation()
-            exportDropdown.classList.toggle('active')
+        // 鼠标悬停显示菜单
+        exportDropdown.addEventListener('mouseenter', () => {
+            exportDropdown.classList.add('active')
         })
         
-        document.addEventListener('click', () => {
+        // 鼠标离开隐藏菜单
+        exportDropdown.addEventListener('mouseleave', () => {
             exportDropdown.classList.remove('active')
         })
         
