@@ -77,34 +77,51 @@ class MarkdownEditor {
     }
 
     setupScrollSync() {
+        // 清除之前的事件监听器
+        if (this.editorScrollHandler) {
+            this.editor.scrollDOM.removeEventListener('scroll', this.editorScrollHandler)
+        }
+        if (this.previewScrollHandler) {
+            const previewWrapper = document.querySelector('.preview-wrapper')
+            if (previewWrapper) {
+                previewWrapper.removeEventListener('scroll', this.previewScrollHandler)
+            }
+        }
+
         const editorScroller = this.editor.scrollDOM
-        const previewElement = document.getElementById('preview')
+        const previewWrapper = document.querySelector('.preview-wrapper')
+        
+        if (!editorScroller || !previewWrapper) return
         
         let isEditorScrolling = false
         let isPreviewScrolling = false
 
-        editorScroller.addEventListener('scroll', () => {
+        // 编辑器滚动同步到预览
+        this.editorScrollHandler = () => {
             if (!this.syncScroll || isPreviewScrolling) return
             
             isEditorScrolling = true
-            const scrollRatio = editorScroller.scrollTop / (editorScroller.scrollHeight - editorScroller.clientHeight)
-            const previewScrollTop = scrollRatio * (previewElement.scrollHeight - previewElement.clientHeight)
-            previewElement.parentElement.scrollTop = previewScrollTop
+            const scrollRatio = editorScroller.scrollTop / Math.max(1, editorScroller.scrollHeight - editorScroller.clientHeight)
+            const previewScrollTop = scrollRatio * Math.max(0, previewWrapper.scrollHeight - previewWrapper.clientHeight)
+            previewWrapper.scrollTop = previewScrollTop
             
             setTimeout(() => { isEditorScrolling = false }, 100)
-        })
+        }
 
-        previewElement.parentElement.addEventListener('scroll', () => {
+        // 预览滚动同步到编辑器
+        this.previewScrollHandler = () => {
             if (!this.syncScroll || isEditorScrolling) return
             
             isPreviewScrolling = true
-            const previewWrapper = previewElement.parentElement
-            const scrollRatio = previewWrapper.scrollTop / (previewWrapper.scrollHeight - previewWrapper.clientHeight)
-            const editorScrollTop = scrollRatio * (editorScroller.scrollHeight - editorScroller.clientHeight)
+            const scrollRatio = previewWrapper.scrollTop / Math.max(1, previewWrapper.scrollHeight - previewWrapper.clientHeight)
+            const editorScrollTop = scrollRatio * Math.max(0, editorScroller.scrollHeight - editorScroller.clientHeight)
             editorScroller.scrollTop = editorScrollTop
             
             setTimeout(() => { isPreviewScrolling = false }, 100)
-        })
+        }
+
+        editorScroller.addEventListener('scroll', this.editorScrollHandler)
+        previewWrapper.addEventListener('scroll', this.previewScrollHandler)
     }
 
     setupEventListeners() {
