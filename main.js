@@ -28,6 +28,7 @@ class MarkdownEditor {
         this.setupMarked()
         this.loadTheme()
         this.updatePreview()
+        this.updateToc()
     }
 
     setupEditor() {
