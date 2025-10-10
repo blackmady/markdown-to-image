@@ -292,11 +292,41 @@ class MarkdownEditor {
         // 导出功能
         this.setupExportMenu()
         
+        // 语言切换功能
+        this.setupLanguageSelector()
+        
         // 文件输入
         document.getElementById('fileInput').addEventListener('change', (e) => this.handleFileLoad(e))
         
         // 键盘快捷键
         document.addEventListener('keydown', (e) => this.handleKeyboard(e))
+    }
+
+    setupLanguageSelector() {
+        const languageBtn = document.getElementById('languageBtn')
+        const languageMenu = document.querySelector('.language-menu')
+        
+        // 切换语言菜单显示/隐藏
+        languageBtn.addEventListener('click', (e) => {
+            e.stopPropagation()
+            languageMenu.classList.toggle('show')
+        })
+        
+        // 点击其他地方关闭菜单
+        document.addEventListener('click', () => {
+            languageMenu.classList.remove('show')
+        })
+        
+        // 语言选择事件
+        languageMenu.addEventListener('click', (e) => {
+            if (e.target.hasAttribute('data-lang')) {
+                const lang = e.target.getAttribute('data-lang')
+                if (typeof setLanguage === 'function') {
+                    setLanguage(lang)
+                }
+                languageMenu.classList.remove('show')
+            }
+        })
     }
 
     setupExportMenu() {

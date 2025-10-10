@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- 基础SEO标签 -->
-    <title>Markdown转换工具 - 在线Markdown编辑器与导出工具 | MD2IMG</title>
-    <meta name="description" content="免费在线Markdown编辑器，支持实时预览、数学公式、代码高亮，可导出为HTML、PDF、PNG、JPG、WEBP格式。功能强大的Markdown转换工具，支持暗黑模式和目录导航。">
-    <meta name="keywords" content="Markdown编辑器,Markdown转换,在线编辑器,PDF导出,图片导出,数学公式,代码高亮,实时预览,暗黑模式,免费工具">
+    <!-- 基础SEO标签 - 将通过JavaScript动态更新 -->
+    <title>Markdown 转换工具 - 在线 Markdown 编辑器和转换器</title>
+    <meta name="description" content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。">
+    <meta name="keywords" content="Markdown编辑器,在线编辑器,Markdown转换,PDF导出,图片导出,数学公式,代码高亮,实时预览">
     <meta name="author" content="blackmady">
     <meta name="robots" content="index, follow">
     <meta name="language" content="zh-CN">
     
-    <!-- Open Graph 标签 -->
+    <!-- Open Graph 标签 - 将通过JavaScript动态更新 -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Markdown转换工具 - 在线Markdown编辑器与导出工具">
-    <meta property="og:description" content="免费在线Markdown编辑器，支持实时预览、数学公式、代码高亮，可导出为HTML、PDF、PNG、JPG、WEBP格式。">
+    <meta property="og:title" content="Markdown 转换工具 - 在线 Markdown 编辑器和转换器">
+    <meta property="og:description" content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。">
     <meta property="og:url" content="https://md.pgit.top">
     <meta property="og:site_name" content="MD2IMG">
     <meta property="og:locale" content="zh_CN">
     
-    <!-- Twitter Card 标签 -->
+    <!-- Twitter Card 标签 - 将通过JavaScript动态更新 -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Markdown转换工具 - 在线Markdown编辑器与导出工具">
-    <meta name="twitter:description" content="免费在线Markdown编辑器，支持实时预览、数学公式、代码高亮，可导出为HTML、PDF、PNG、WEBP格式。">
+    <meta name="twitter:title" content="Markdown 转换工具 - 在线 Markdown 编辑器和转换器">
+    <meta name="twitter:description" content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。">
     <meta name="twitter:creator" content="@blackmady">
     
     <!-- 网站图标 -->
@@ -38,13 +38,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
     
-    <!-- 结构化数据 -->
+    <!-- 国际化脚本 -->
+    <script src="./i18n.js"></script>
+    
+    <!-- 结构化数据 - 将通过JavaScript动态更新 -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "MD2IMG - Markdown转换工具",
-        "description": "免费在线Markdown编辑器，支持实时预览、数学公式、代码高亮，可导出为HTML、PDF、PNG、JPG、WEBP格式。",
+        "name": "Markdown 转换工具 - 在线 Markdown 编辑器和转换器",
+        "description": "功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。",
         "url": "https://md.pgit.top",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Web Browser",
@@ -78,64 +81,77 @@
         <!-- 工具栏 -->
         <div class="toolbar">
             <div class="toolbar-left">
-                <button id="toggleToc" class="toolbar-btn" title="切换目录">
+                <button id="toggleToc" class="toolbar-btn" title="切换目录" data-i18n-title="toolbar.toggleToc">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z"/>
                     </svg>
                 </button>
-                <button id="toggleFullscreen" class="toolbar-btn" title="全屏编辑">
+                <button id="toggleFullscreen" class="toolbar-btn" title="全屏编辑" data-i18n-title="toolbar.fullscreen">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
                     </svg>
                 </button>
                 <div class="toolbar-divider"></div>
-                <button id="newFile" class="toolbar-btn" title="新建文件">
+                <button id="newFile" class="toolbar-btn" title="新建文件" data-i18n-title="toolbar.newFile">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                     </svg>
                 </button>
-                <button id="openFile" class="toolbar-btn" title="打开文件">
+                <button id="openFile" class="toolbar-btn" title="打开文件" data-i18n-title="toolbar.openFile">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
                     </svg>
                 </button>
-                <button id="saveFile" class="toolbar-btn" title="保存文件">
+                <button id="saveFile" class="toolbar-btn" title="保存文件" data-i18n-title="toolbar.saveFile">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z"/>
                     </svg>
                 </button>
             </div>
             <div class="toolbar-center">
-                <span class="app-title">Markdown 转换工具</span>
+                <span class="app-title" data-i18n="appTitle">Markdown 转换工具</span>
             </div>
             <div class="toolbar-right">
-                <!-- 显示 Star 数量的图标，点击跳转到 GitHub 仓库 -->
-                <a href="https://github.com/blackmady/markdown-to-image" target="_blank" class="github-star-link">
-                  <img 
-                    src="https://img.shields.io/github/stars/blackmady/markdown-to-image?style=social&logo=github" 
-                    alt="GitHub Stars"
-                  >
+                <a href="https://github.com/blackmady/markdown-to-image" target="_blank" class="github-star-link" title="GitHub Star" data-i18n-title="toolbar.githubStar">
+                    <img src="https://img.shields.io/github/stars/blackmady/markdown-to-image?style=social" alt="GitHub Stars">
                 </a>
                 <div class="export-dropdown">
-                    <button id="exportBtn" class="toolbar-btn" title="导出">
+                    <button id="exportBtn" class="toolbar-btn" title="导出" data-i18n-title="toolbar.export">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                         </svg>
-                        <span>导出</span>
+                        <span data-i18n="toolbar.export">导出</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M7,10L12,15L17,10H7Z"/>
                         </svg>
                     </button>
                     <div class="export-menu">
-                        <button data-format="html">导出 HTML</button>
-                        <button data-format="pdf">导出 PDF</button>
-                        <button data-format="png">导出 PNG</button>
-                        <button data-format="jpg">导出 JPG</button>
-                        <button data-format="webp">导出 WEBP</button>
+                        <button data-format="html" data-i18n="export.html">导出 HTML</button>
+                        <button data-format="pdf" data-i18n="export.pdf">导出 PDF</button>
+                        <button data-format="png" data-i18n="export.png">导出 PNG</button>
+                        <button data-format="jpg" data-i18n="export.jpg">导出 JPG</button>
+                        <button data-format="webp" data-i18n="export.webp">导出 WEBP</button>
                     </div>
                 </div>
                 <div class="toolbar-divider"></div>
-                <button id="toggleTheme" class="toolbar-btn" title="切换主题">
+                <div class="language-selector">
+                    <button id="languageBtn" class="toolbar-btn" title="选择语言" data-i18n-title="toolbar.language">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07Z"/>
+                        </svg>
+                        <span id="currentLanguage">中文</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7,10L12,15L17,10H7Z"/>
+                        </svg>
+                    </button>
+                    <div class="language-menu">
+                        <button data-lang="zh-CN">简体中文</button>
+                        <button data-lang="zh-TW">繁體中文</button>
+                        <button data-lang="en">English</button>
+                    </div>
+                </div>
+                <div class="toolbar-divider"></div>
+                <button id="toggleTheme" class="toolbar-btn" title="切换主题" data-i18n-title="toolbar.theme">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.4 6.35,17.41C9.37,20.43 14,20.54 17.33,17.97Z"/>
                     </svg>
@@ -148,11 +164,11 @@
             <!-- 目录侧边栏 -->
             <div class="toc-sidebar" id="tocSidebar">
                 <div class="toc-header">
-                    <h3>目录</h3>
+                    <h3 data-i18n="toc.title">目录</h3>
                     <button id="closeToc" class="close-btn">×</button>
                 </div>
                 <div class="toc-content" id="tocContent">
-                    <p class="toc-empty">暂无目录</p>
+                    <p class="toc-empty" data-i18n="toc.empty">暂无目录</p>
                 </div>
             </div>
 
@@ -160,9 +176,9 @@
             <div class="editor-container">
                 <div class="editor-panel">
                     <div class="panel-header">
-                        <span>Markdown 编辑器</span>
+                        <span data-i18n="editor.title">Markdown 编辑器</span>
                         <div class="panel-actions">
-                            <button id="wordWrap" class="panel-btn" title="自动换行">
+                            <button id="wordWrap" class="panel-btn" title="自动换行" data-i18n-title="editor.wordWrap">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M4,6H20V4H4V6M4,11H15V9H4V11M4,16H20V14H4V16M4,21H15V19H4V21Z"/>
                                 </svg>
@@ -176,9 +192,9 @@
 
                 <div class="preview-panel">
                     <div class="panel-header">
-                        <span>预览</span>
+                        <span data-i18n="preview.title">预览</span>
                         <div class="panel-actions">
-                            <button id="syncScroll" class="panel-btn active" title="同步滚动">
+                            <button id="syncScroll" class="panel-btn active" title="同步滚动" data-i18n-title="preview.syncScroll">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16Z"/>
                                 </svg>
@@ -197,5 +213,15 @@
     <input type="file" id="fileInput" accept=".md,.txt" style="display: none;">
 
     <script type="module" src="./main.js"></script>
+    
+    <!-- 国际化初始化 -->
+    <script>
+        // 页面加载完成后初始化国际化
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initI18n === 'function') {
+                initI18n();
+            }
+        });
+    </script>
 </body>
 </html>

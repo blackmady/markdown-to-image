@@ -228,6 +228,88 @@ body {
     border-radius: 0 0 6px 6px;
 }
 
+/* 语言选择器 */
+.language-selector {
+    position: relative;
+}
+
+.language-selector:hover .language-menu {
+    display: block;
+}
+
+.language-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-shadow: var(--shadow-lg);
+    min-width: 120px;
+    z-index: 1001;
+    display: none;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.language-menu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.language-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.language-menu button:hover {
+    background-color: var(--bg-secondary);
+}
+
+.language-menu button:first-child {
+    border-radius: 6px 6px 0 0;
+}
+
+.language-menu button:last-child {
+    border-radius: 0 0 6px 6px;
+}
+
+/* 多语言文本适配 */
+.toolbar-btn span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+}
+
+/* 英文界面适配 */
+[lang="en"] .toolbar-btn span {
+    max-width: 100px;
+}
+
+/* 中文界面适配 */
+[lang="zh-CN"] .toolbar-btn span,
+[lang="zh-TW"] .toolbar-btn span {
+    max-width: 70px;
+}
+
+/* 当前语言显示 */
+#currentLanguage {
+    font-size: 11px;
+    font-weight: 500;
+}
+
 /* 主内容区域 */
 .main-content {
     flex: 1;
