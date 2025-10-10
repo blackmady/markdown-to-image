@@ -506,30 +506,35 @@ $$
     }
 
     async exportFile(format) {
-        const content = this.editor.state.doc.toString()
         const previewElement = document.getElementById('preview')
         
+        if (!previewElement) {
+            alert('预览内容为空，无法导出')
+            return
+        }
+
         try {
             switch (format) {
                 case 'html':
-                    await this.exportHTML(content)
+                    const htmlContent = previewElement.innerHTML
+                    const blob = new Blob([htmlContent], { type: 'text/html' })
+                    saveAs(blob, 'document.html')
                     break
                 case 'pdf':
                     await this.exportPDF(previewElement)
                     break
                 case 'png':
-                    await this.exportImage(previewElement, 'png')
-                    break
                 case 'jpg':
-                    await this.exportImage(previewElement, 'jpeg')
-                    break
                 case 'webp':
-                    await this.exportImage(previewElement, 'webp')
+                    const imageFormat = format === 'jpg' ? 'jpeg' : format
+                    await this.exportImage(previewElement, imageFormat)
                     break
+                default:
+                    alert('不支持的导出格式')
             }
         } catch (error) {
             console.error('导出失败:', error)
-            alert('导出失败，请重试')
+            alert(`导出失败: ${error.message}`)
         }
     }
 
@@ -568,46 +573,100 @@ $$
     }
 
     async exportPDF(element) {
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true
-        })
-        
-        const imgData = canvas.toDataURL('image/png')
-        const pdf = new jsPDF('p', 'mm', 'a4')
-        
-        const imgWidth = 210
-        const pageHeight = 295
-        const imgHeight = (canvas.height * imgWidth) / canvas.width
-        let heightLeft = imgHeight
-        
-        let position = 0
-        
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-        heightLeft -= pageHeight
-        
-        while (heightLeft >= 0) {
-            position = heightLeft - imgHeight
-            pdf.addPage()
+        try {
+            // 确保元素可见且有内容
+            if (!element || element.children.length === 0) {
+                throw new Error('预览内容为空，无法导出PDF')
+            }
+
+            // 临时设置样式以确保正确渲染
+            const originalStyle = element.style.cssText
+            element.style.width = '800px'
+            element.style.backgroundColor = 'white'
+            element.style.padding = '20px'
+            
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#ffffff',
+                width: element.scrollWidth,
+                height: element.scrollHeight,
+                logging: false
+            })
+            
+            // 恢复原始样式
+            element.style.cssText = originalStyle
+            
+            const imgData = canvas.toDataURL('image/png')
+            const pdf = new jsPDF('p', 'mm', 'a4')
+            
+            const imgWidth = 210
+            const pageHeight = 295
+            const imgHeight = (canvas.height * imgWidth) / canvas.width
+            let heightLeft = imgHeight
+            
+            let position = 0
+            
             pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
             heightLeft -= pageHeight
+            
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight
+                pdf.addPage()
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+                heightLeft -= pageHeight
+            }
+            
+            pdf.save('document.pdf')
+        } catch (error) {
+            console.error('PDF导出失败:', error)
+            throw error
         }
-        
-        pdf.save('document.pdf')
     }
 
     async exportImage(element, format) {
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true
-        })
-        
-        canvas.toBlob((blob) => {
-            const extension = format === 'jpeg' ? 'jpg' : format
-            saveAs(blob, `document.${extension}`)
-        }, `image/${format}`, 0.9)
+        try {
+            // 确保元素可见且有内容
+            if (!element || element.children.length === 0) {
+                throw new Error('预览内容为空，无法导出图片')
+            }
+
+            // 临时设置样式以确保正确渲染
+            const originalStyle = element.style.cssText
+            element.style.width = '800px'
+            element.style.backgroundColor = 'white'
+            element.style.padding = '20px'
+            
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#ffffff',
+                width: element.scrollWidth,
+                height: element.scrollHeight,
+                logging: false
+            })
+            
+            // 恢复原始样式
+            element.style.cssText = originalStyle
+            
+            // 使用Promise包装toBlob以便正确处理异步
+            return new Promise((resolve, reject) => {
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const extension = format === 'jpeg' ? 'jpg' : format
+                        saveAs(blob, `document.${extension}`)
+                        resolve()
+                    } else {
+                        reject(new Error('图片生成失败'))
+                    }
+                }, `image/${format}`, 0.9)
+            })
+        } catch (error) {
+            console.error('图片导出失败:', error)
+            throw error
+        }
     }
 
     getMarkdownCSS() {
