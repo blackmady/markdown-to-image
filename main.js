@@ -505,6 +505,36 @@ $$
         saveAs(blob, filename)
     }
 
+    // 清理HTML内容，去除可能导致样式冲突的类名和属性
+    cleanElementForExport(html) {
+        // 创建临时div来处理HTML
+        const tempDiv = document.createElement('div')
+        tempDiv.innerHTML = html
+        
+        // 递归清理所有元素
+        const cleanElement = (element) => {
+            if (element.nodeType === Node.ELEMENT_NODE) {
+                // 移除所有class属性
+                element.removeAttribute('class')
+                // 移除style属性中可能包含现代颜色函数的部分
+                element.removeAttribute('style')
+                // 移除data属性
+                const attributes = [...element.attributes]
+                attributes.forEach(attr => {
+                    if (attr.name.startsWith('data-')) {
+                        element.removeAttribute(attr.name)
+                    }
+                })
+                
+                // 递归处理子元素
+                Array.from(element.children).forEach(cleanElement)
+            }
+        }
+        
+        Array.from(tempDiv.children).forEach(cleanElement)
+        return tempDiv.innerHTML
+    }
+
     async exportFile(format) {
         const previewElement = document.getElementById('preview')
         
@@ -579,24 +609,137 @@ $$
                 throw new Error('预览内容为空，无法导出PDF')
             }
 
-            // 临时设置样式以确保正确渲染
-            const originalStyle = element.style.cssText
-            element.style.width = '800px'
-            element.style.backgroundColor = 'white'
-            element.style.padding = '20px'
+            // 根据当前主题设置背景颜色
+            const backgroundColor = this.isDarkMode ? '#1a1a1a' : '#ffffff'
+            const textColor = this.isDarkMode ? '#ffffff' : '#000000'
+
+            // 创建一个完全隔离的iframe来避免样式冲突
+            const iframe = document.createElement('iframe')
+            iframe.style.cssText = `
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+                width: 800px;
+                height: 600px;
+                border: none;
+            `
+            document.body.appendChild(iframe)
             
-            const canvas = await html2canvas(element, {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
+            
+            // 在iframe中创建基础HTML结构，不引入任何外部样式
+            iframeDoc.open()
+            iframeDoc.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                        body {
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                            line-height: 1.6;
+                            color: ${textColor};
+                            background-color: ${backgroundColor};
+                            padding: 20px;
+                            width: 800px;
+                        }
+                        h1, h2, h3, h4, h5, h6 {
+                            margin: 1em 0 0.5em 0;
+                            color: ${textColor};
+                        }
+                        p {
+                            margin: 0.5em 0;
+                        }
+                        pre {
+                            background-color: ${this.isDarkMode ? '#2d2d2d' : '#f6f8fa'};
+                            color: ${textColor};
+                            padding: 16px;
+                            border-radius: 6px;
+                            overflow-x: auto;
+                            margin: 1em 0;
+                        }
+                        code {
+                            background-color: ${this.isDarkMode ? '#2d2d2d' : '#f6f8fa'};
+                            color: ${textColor};
+                            padding: 2px 4px;
+                            border-radius: 3px;
+                            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+                        }
+                        blockquote {
+                            border-left: 4px solid ${this.isDarkMode ? '#444' : '#ddd'};
+                            margin: 1em 0;
+                            padding-left: 1em;
+                            color: ${this.isDarkMode ? '#ccc' : '#666'};
+                        }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            margin: 1em 0;
+                        }
+                        th, td {
+                            border: 1px solid ${this.isDarkMode ? '#444' : '#ddd'};
+                            padding: 8px 12px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: ${this.isDarkMode ? '#2d2d2d' : '#f6f8fa'};
+                            font-weight: 600;
+                        }
+                        ul, ol {
+                            margin: 0.5em 0;
+                            padding-left: 2em;
+                        }
+                        li {
+                            margin: 0.25em 0;
+                        }
+                        a {
+                            color: ${this.isDarkMode ? '#58a6ff' : '#0969da'};
+                            text-decoration: none;
+                        }
+                        img {
+                            max-width: 100%;
+                            height: auto;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="content"></div>
+                </body>
+                </html>
+            `)
+            iframeDoc.close()
+            
+            // 等待iframe加载完成
+            await new Promise(resolve => {
+                if (iframe.contentWindow) {
+                    iframe.contentWindow.onload = resolve
+                } else {
+                    setTimeout(resolve, 100)
+                }
+            })
+            
+            // 将内容复制到iframe中，去除所有样式类
+            const contentDiv = iframeDoc.getElementById('content')
+            const cleanContent = this.cleanElementForExport(element.innerHTML)
+            contentDiv.innerHTML = cleanContent
+            
+            const canvas = await html2canvas(contentDiv, {
                 scale: 2,
                 useCORS: true,
                 allowTaint: true,
-                backgroundColor: '#ffffff',
-                width: element.scrollWidth,
-                height: element.scrollHeight,
+                backgroundColor: backgroundColor,
+                width: 800,
+                height: contentDiv.scrollHeight,
                 logging: false
             })
             
-            // 恢复原始样式
-            element.style.cssText = originalStyle
+            // 清理iframe
+            document.body.removeChild(iframe)
             
             const imgData = canvas.toDataURL('image/png')
             const pdf = new jsPDF('p', 'mm', 'a4')
@@ -632,24 +775,137 @@ $$
                 throw new Error('预览内容为空，无法导出图片')
             }
 
-            // 临时设置样式以确保正确渲染
-            const originalStyle = element.style.cssText
-            element.style.width = '800px'
-            element.style.backgroundColor = 'white'
-            element.style.padding = '20px'
+            // 根据当前主题设置背景颜色
+            const backgroundColor = this.isDarkMode ? '#1a1a1a' : '#ffffff'
+            const textColor = this.isDarkMode ? '#ffffff' : '#000000'
+
+            // 创建一个完全隔离的iframe来避免样式冲突
+            const iframe = document.createElement('iframe')
+            iframe.style.cssText = `
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+                width: 800px;
+                height: 600px;
+                border: none;
+            `
+            document.body.appendChild(iframe)
             
-            const canvas = await html2canvas(element, {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
+            
+            // 在iframe中创建基础HTML结构，不引入任何外部样式
+            iframeDoc.open()
+            iframeDoc.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                        body {
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                            line-height: 1.6;
+                            color: ${textColor};
+                            background-color: ${backgroundColor};
+                            padding: 20px;
+                            width: 800px;
+                        }
+                        h1, h2, h3, h4, h5, h6 {
+                            margin: 1em 0 0.5em 0;
+                            color: ${textColor};
+                        }
+                        p {
+                            margin: 0.5em 0;
+                        }
+                        pre {
+                            background-color: ${this.isDarkMode ? '#2d2d2d' : '#f6f8fa'};
+                            color: ${textColor};
+                            padding: 16px;
+                            border-radius: 6px;
+                            overflow-x: auto;
+                            margin: 1em 0;
+                        }
+                        code {
+                            background-color: ${this.isDarkMode ? '#2d2d2d' : '#f6f8fa'};
+                            color: ${textColor};
+                            padding: 2px 4px;
+                            border-radius: 3px;
+                            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+                        }
+                        blockquote {
+                            border-left: 4px solid ${this.isDarkMode ? '#444' : '#ddd'};
+                            margin: 1em 0;
+                            padding-left: 1em;
+                            color: ${this.isDarkMode ? '#ccc' : '#666'};
+                        }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            margin: 1em 0;
+                        }
+                        th, td {
+                            border: 1px solid ${this.isDarkMode ? '#444' : '#ddd'};
+                            padding: 8px 12px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: ${this.isDarkMode ? '#2d2d2d' : '#f6f8fa'};
+                            font-weight: 600;
+                        }
+                        ul, ol {
+                            margin: 0.5em 0;
+                            padding-left: 2em;
+                        }
+                        li {
+                            margin: 0.25em 0;
+                        }
+                        a {
+                            color: ${this.isDarkMode ? '#58a6ff' : '#0969da'};
+                            text-decoration: none;
+                        }
+                        img {
+                            max-width: 100%;
+                            height: auto;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="content"></div>
+                </body>
+                </html>
+            `)
+            iframeDoc.close()
+            
+            // 等待iframe加载完成
+            await new Promise(resolve => {
+                if (iframe.contentWindow) {
+                    iframe.contentWindow.onload = resolve
+                } else {
+                    setTimeout(resolve, 100)
+                }
+            })
+            
+            // 将内容复制到iframe中，去除所有样式类
+            const contentDiv = iframeDoc.getElementById('content')
+            const cleanContent = this.cleanElementForExport(element.innerHTML)
+            contentDiv.innerHTML = cleanContent
+            
+            const canvas = await html2canvas(contentDiv, {
                 scale: 2,
                 useCORS: true,
                 allowTaint: true,
-                backgroundColor: '#ffffff',
-                width: element.scrollWidth,
-                height: element.scrollHeight,
+                backgroundColor: backgroundColor,
+                width: 800,
+                height: contentDiv.scrollHeight,
                 logging: false
             })
             
-            // 恢复原始样式
-            element.style.cssText = originalStyle
+            // 清理iframe
+            document.body.removeChild(iframe)
             
             // 使用Promise包装toBlob以便正确处理异步
             return new Promise((resolve, reject) => {
