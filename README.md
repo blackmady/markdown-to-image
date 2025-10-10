@@ -128,6 +128,10 @@ md2img/
 └── README.md           # 项目说明
 ```
 
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=blackmady/markdown-to-image&type=Date)](https://www.star-history.com/#markdown-to-image&Date)
+
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
