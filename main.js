@@ -22,6 +22,154 @@ class MarkdownEditor {
         this.init()
     }
 
+    // 生成有效的CSS ID
+    generateValidId(text, index) {
+        // 移除所有非字母数字字符，只保留字母、数字、空格和连字符
+        let id = text.toLowerCase()
+            .replace(/[^\w\s-]/g, '') // 移除特殊字符
+            .replace(/\s+/g, '-')     // 空格替换为连字符
+            .replace(/-+/g, '-')      // 多个连字符合并为一个
+            .replace(/^-|-$/g, '')    // 移除开头和结尾的连字符
+        
+        // 确保ID不为空且以字母开头（CSS规范要求）
+        if (!id || !/^[a-zA-Z]/.test(id)) {
+            id = `heading-${index}`
+        }
+        
+        // 确保ID至少有一个字符
+        if (id.length === 0) {
+            id = `heading-${index}`
+        }
+        
+        return id
+    }
+
+    setupTocClickHandler() {
+        const tocContent = document.getElementById('tocContent')
+        
+        // 移除旧的事件监听器（如果存在）
+        if (this.tocClickHandler) {
+            tocContent.removeEventListener('click', this.tocClickHandler)
+        }
+        
+        // 创建新的事件处理器
+        this.tocClickHandler = (e) => {
+            const tocItem = e.target.closest('.toc-item')
+            if (tocItem) {
+                e.preventDefault()
+                
+                console.log('TOC click event triggered', tocItem)
+                console.log('Processing toc-item click:', tocItem)
+                console.log('TOC item HTML:', tocItem.outerHTML)
+                
+                const href = tocItem.getAttribute('href')
+                const dataLine = tocItem.getAttribute('data-line')
+                const headingIndex = tocItem.getAttribute('data-heading-index')
+                
+                console.log('href:', href, 'data-line:', dataLine, 'heading-index:', headingIndex)
+                
+                if (href) {
+                    const targetId = href.substring(1) // 移除 # 号
+                    
+                    // 验证targetId是否为有效的CSS选择器
+                    if (!targetId || targetId.trim() === '' || targetId === '-') {
+                        console.error('Invalid target ID:', targetId)
+                        return
+                    }
+                    
+                    console.log('Looking for target element with ID:', targetId)
+                    
+                    // 滚动预览区域
+                    const previewElement = document.getElementById('preview')
+                    let targetElement = null
+                    
+                    // 安全地查询元素，使用try-catch防止无效选择器
+                    try {
+                        targetElement = previewElement.querySelector(`#${CSS.escape(targetId)}`)
+                    } catch (error) {
+                        console.error('Invalid CSS selector for ID:', targetId, error)
+                        return
+                    }
+                    
+                    if (targetElement) {
+                        console.log('Target element found, scrolling to it')
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        })
+                        
+                        // 同步滚动编辑器
+                        if (dataLine) {
+                            try {
+                                const lineNumber = parseInt(dataLine)
+                                console.log('Syncing editor to line:', lineNumber + 1)
+                                
+                                if (lineNumber >= 0 && lineNumber < this.editor.state.doc.lines) {
+                                    const pos = this.editor.state.doc.line(Math.max(1, lineNumber + 1)).from
+                                    this.editor.dispatch({
+                                        selection: { anchor: pos, head: pos },
+                                        scrollIntoView: true
+                                    })
+                                    this.editor.focus()
+                                } else {
+                                    console.warn('Line number out of bounds:', lineNumber)
+                                }
+                            } catch (error) {
+                                console.error('Error syncing editor scroll:', error)
+                            }
+                        }
+                    } else {
+                        console.log('Exact match failed, searching all headings...')
+                        const allHeadings = previewElement.querySelectorAll('h1, h2, h3, h4, h5, h6')
+                        console.log('All headings in preview:')
+                        allHeadings.forEach((h, i) => {
+                            console.log(`  ${i}: id="${h.id}", text="${h.textContent.trim()}"`)
+                        })
+                        
+                        // 尝试根据标题索引匹配
+                        if (headingIndex !== null) {
+                            const index = parseInt(headingIndex)
+                            if (index >= 0 && index < allHeadings.length) {
+                                const targetByIndex = allHeadings[index]
+                                console.log('Found target by index:', targetByIndex)
+                                targetByIndex.scrollIntoView({ 
+                                    behavior: 'smooth', 
+                                    block: 'start' 
+                                })
+                                
+                                // 同步滚动编辑器
+                                if (dataLine) {
+                                    try {
+                                        const lineNumber = parseInt(dataLine)
+                                        console.log('Syncing editor to line:', lineNumber + 1)
+                                        
+                                        if (lineNumber >= 0 && lineNumber < this.editor.state.doc.lines) {
+                                            const pos = this.editor.state.doc.line(Math.max(1, lineNumber + 1)).from
+                                            this.editor.dispatch({
+                                                selection: { anchor: pos, head: pos },
+                                                scrollIntoView: true
+                                            })
+                                            this.editor.focus()
+                                        }
+                                    } catch (error) {
+                                        console.error('Error syncing editor scroll:', error)
+                                    }
+                                }
+                                return
+                            }
+                        }
+                        
+                        console.error('Target element not found:', targetId)
+                        console.log('Available elements in preview:', previewElement.innerHTML.substring(0, 500) + '...')
+                    }
+                }
+            }
+        }
+        
+        // 绑定新的事件监听器
+        tocContent.addEventListener('click', this.tocClickHandler)
+    }
+
     init() {
         this.setupEditor()
         this.setupEventListeners()
@@ -29,6 +177,7 @@ class MarkdownEditor {
         this.loadTheme()
         this.updatePreview()
         this.updateToc()
+        this.setupTocClickHandler() // 确保在初始化时设置目录点击处理器
     }
 
     setupEditor() {
@@ -269,11 +418,7 @@ $$
         const headings = previewElement.querySelectorAll('h1, h2, h3, h4, h5, h6')
         headings.forEach((heading, index) => {
             const text = heading.textContent.trim()
-            let id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
-            // 确保ID不为空
-            if (!id) {
-                id = `heading-${index}`
-            }
+            const id = this.generateValidId(text, index)
             heading.id = id
         })
     }
@@ -292,12 +437,7 @@ $$
             if (match) {
                 const level = match[1].length
                 const text = match[2].trim()
-                let id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
-                // 确保ID不为空
-                if (!id) {
-                    id = `heading-${index}`
-                }
-                headings.push({ level, text, id, line: index })
+                headings.push({ level, text, line: index })
             }
         })
         
@@ -309,10 +449,11 @@ $$
             return
         }
         
-        const tocHtml = headings.map(heading => {
-            // 确保ID不为空且有效
-            const safeId = heading.id || `heading-${heading.line}`
-            return `<a href="#${safeId}" class="toc-item level-${heading.level}" data-line="${heading.line}">
+        // 使用与updatePreview相同的ID生成逻辑：基于标题索引
+        const tocHtml = headings.map((heading, headingIndex) => {
+            const text = heading.text.trim()
+            const id = this.generateValidId(text, headingIndex)
+            return `<a href="#${id}" class="toc-item level-${heading.level}" data-line="${heading.line}" data-heading-index="${headingIndex}">
                 ${heading.text}
             </a>`
         }).join('')
@@ -325,44 +466,8 @@ $$
             tocSidebar.classList.add('active')
         }
         
-        // 添加点击事件
-        tocContent.querySelectorAll('.toc-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault()
-                const href = item.getAttribute('href')
-                if (!href || href.length <= 1) return // 检查href是否有效
-                
-                const targetId = href.substring(1)
-                if (!targetId) return // 检查targetId是否为空
-                
-                const previewElement = document.getElementById('preview')
-                const targetElement = previewElement.querySelector(`#${targetId}`)
-                
-                if (targetElement) {
-                    // 滚动到预览区域中的对应标题
-                    const previewWrapper = document.querySelector('.preview-wrapper')
-                    const offsetTop = targetElement.offsetTop
-                    previewWrapper.scrollTo({
-                        top: offsetTop - 20, // 添加一些顶部间距
-                        behavior: 'smooth'
-                    })
-                    
-                    // 同步滚动编辑器到对应行
-                    const lineNumber = parseInt(item.getAttribute('data-line'))
-                    if (!isNaN(lineNumber) && this.editor) {
-                        // 计算编辑器中对应行的位置
-                        const doc = this.editor.state.doc
-                        const line = doc.line(lineNumber + 1) // CodeMirror行号从1开始
-                        const pos = line.from
-                        
-                        // 滚动编辑器到对应位置
-                        this.editor.dispatch({
-                            effects: EditorView.scrollIntoView(pos, { y: 'start' })
-                        })
-                    }
-                }
-            })
-        })
+        // 使用事件委托来处理点击事件，避免重复绑定
+        this.setupTocClickHandler()
     }
 
     toggleToc() {
