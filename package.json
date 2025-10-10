@@ -1,0 +1,32 @@
+{
+  "name": "md2img",
+  "version": "1.0.0",
+  "description": "A powerful Markdown to HTML/PDF/Image converter with live preview",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "pnpm run build && wrangler pages publish dist"
+  },
+  "keywords": ["markdown", "html", "pdf", "converter", "editor"],
+  "author": "blackmady",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "@codemirror/lang-markdown": "^6.2.4",
+    "@codemirror/state": "^6.4.0",
+    "@codemirror/view": "^6.23.0",
+    "codemirror": "^6.0.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "marked": "^11.1.1",
+    "highlight.js": "^11.9.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+    "dompurify": "^3.0.7",
+    "file-saver": "^2.0.5"
+  }
+}
