@@ -588,7 +588,7 @@ $$
                 changes: {
                     from: 0,
                     to: this.editor.state.doc.length,
-                    insert: this.getDefaultContent()
+                    insert: ''
                 }
             })
             this.currentFile = null
