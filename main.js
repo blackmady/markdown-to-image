@@ -242,51 +242,106 @@ $$
         const content = this.editor.state.doc.toString()
         const html = marked(content)
         const sanitizedHtml = DOMPurify.sanitize(html)
-        document.getElementById('preview').innerHTML = sanitizedHtml
+        
+        // 为标题添加ID以支持锚点跳转
+        const previewElement = document.getElementById('preview')
+        previewElement.innerHTML = sanitizedHtml
+        
+        // 为所有标题添加ID
+        const headings = previewElement.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        headings.forEach((heading, index) => {
+            const text = heading.textContent.trim()
+            let id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
+            // 确保ID不为空
+            if (!id) {
+                id = `heading-${index}`
+            }
+            heading.id = id
+        })
     }
 
     updateToc() {
         const content = this.editor.state.doc.toString()
         const tocContent = document.getElementById('tocContent')
+        const tocSidebar = document.getElementById('tocSidebar')
         
         // 提取标题
         const headings = []
         const lines = content.split('\n')
         
         lines.forEach((line, index) => {
-            const match = line.match(/^(#{1,6})\\s+(.+)$/)
+            const match = line.match(/^(#{1,6})\s+(.+)$/)
             if (match) {
                 const level = match[1].length
                 const text = match[2].trim()
-                const id = text.toLowerCase().replace(/[^\\w\\s-]/g, '').replace(/\\s+/g, '-')
+                let id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
+                // 确保ID不为空
+                if (!id) {
+                    id = `heading-${index}`
+                }
                 headings.push({ level, text, id, line: index })
             }
         })
         
         if (headings.length === 0) {
             tocContent.innerHTML = '<p class="toc-empty">暂无目录</p>'
+            // 如果没有标题，隐藏目录
+            this.isTocVisible = false
+            tocSidebar.classList.remove('active')
             return
         }
         
-        const tocHtml = headings.map(heading => 
-            `<a href="#${heading.id}" class="toc-item level-${heading.level}" data-line="${heading.line}">
+        const tocHtml = headings.map(heading => {
+            // 确保ID不为空且有效
+            const safeId = heading.id || `heading-${heading.line}`
+            return `<a href="#${safeId}" class="toc-item level-${heading.level}" data-line="${heading.line}">
                 ${heading.text}
             </a>`
-        ).join('')
+        }).join('')
         
         tocContent.innerHTML = tocHtml
+        
+        // 如果有标题且目录未显示，自动显示目录
+        if (!this.isTocVisible) {
+            this.isTocVisible = true
+            tocSidebar.classList.add('active')
+        }
         
         // 添加点击事件
         tocContent.querySelectorAll('.toc-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault()
-                const targetId = item.getAttribute('href').substring(1)
-                const targetElement = document.getElementById(targetId) || 
-                                   document.querySelector(`[id="${targetId}"]`) ||
-                                   document.querySelector(`h1, h2, h3, h4, h5, h6`)
+                const href = item.getAttribute('href')
+                if (!href || href.length <= 1) return // 检查href是否有效
+                
+                const targetId = href.substring(1)
+                if (!targetId) return // 检查targetId是否为空
+                
+                const previewElement = document.getElementById('preview')
+                const targetElement = previewElement.querySelector(`#${targetId}`)
                 
                 if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' })
+                    // 滚动到预览区域中的对应标题
+                    const previewWrapper = document.querySelector('.preview-wrapper')
+                    const offsetTop = targetElement.offsetTop
+                    previewWrapper.scrollTo({
+                        top: offsetTop - 20, // 添加一些顶部间距
+                        behavior: 'smooth'
+                    })
+                    
+                    // 同步滚动编辑器到对应行
+                    const lineNumber = parseInt(item.getAttribute('data-line'))
+                    if (!isNaN(lineNumber) && this.editor) {
+                        // 计算编辑器中对应行的位置
+                        const doc = this.editor.state.doc
+                        const line = doc.line(lineNumber + 1) // CodeMirror行号从1开始
+                        const pos = line.from
+                        
+                        // 滚动编辑器到对应位置
+                        this.editor.dispatch({
+                            effects: EditorView.scrollIntoView(pos, { y: 'start' })
+                        })
+                    }
                 }
             })
         })
