@@ -8,6 +8,8 @@ import DOMPurify from 'dompurify'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { saveAs } from 'file-saver'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 
 class MarkdownEditor {
     constructor() {
@@ -420,6 +422,39 @@ $$
             const text = heading.textContent.trim()
             const id = this.generateValidId(text, index)
             heading.id = id
+        })
+        
+        // 渲染数学公式
+        this.renderMath(previewElement)
+    }
+
+    renderMath(element) {
+        // 渲染块级数学公式 $$...$$
+        const blockMathRegex = /\$\$([^$]+)\$\$/g
+        element.innerHTML = element.innerHTML.replace(blockMathRegex, (match, math) => {
+            try {
+                return katex.renderToString(math.trim(), {
+                    displayMode: true,
+                    throwOnError: false
+                })
+            } catch (error) {
+                console.error('KaTeX block math error:', error)
+                return `<span class="math-error">数学公式错误: ${math}</span>`
+            }
+        })
+        
+        // 渲染行内数学公式 $...$
+        const inlineMathRegex = /\$([^$]+)\$/g
+        element.innerHTML = element.innerHTML.replace(inlineMathRegex, (match, math) => {
+            try {
+                return katex.renderToString(math.trim(), {
+                    displayMode: false,
+                    throwOnError: false
+                })
+            } catch (error) {
+                console.error('KaTeX inline math error:', error)
+                return `<span class="math-error">数学公式错误: ${math}</span>`
+            }
         })
     }
 
