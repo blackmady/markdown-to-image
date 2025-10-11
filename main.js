@@ -1160,5 +1160,12 @@ $$
 
 // 初始化应用
 document.addEventListener('DOMContentLoaded', () => {
-    new MarkdownEditor()
+    // 初始化编辑器
+    const editor = new MarkdownEditor()
+    
+    // 编辑器初始化完成后，恢复标题文字
+    const titleElement = document.querySelector('.app-title')
+    if (titleElement) {
+        titleElement.textContent = 'Markdown 转换工具'
+    }
 })
