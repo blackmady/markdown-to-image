@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Git pre-commit hook - 自动增加版本号
+# 每次提交代码时自动将版本号的patch部分+1
+
+echo "正在自动增加版本号..."
+
+# 执行版本号增加脚本
+node scripts/version-bump.js patch
+
+# 检查脚本执行是否成功
+if [ $? -eq 0 ]; then
+    # 将更新后的 package.json 添加到本次提交
+    git add package.json
+    echo "版本号已自动增加并添加到本次提交"
+else
+    echo "版本号增加失败，提交被中止"
+    exit 1
+fi
+
+exit 0
