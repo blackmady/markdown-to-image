@@ -1571,24 +1571,20 @@ sequenceDiagram
             document.body.removeChild(iframe)
             
             const imgData = canvas.toDataURL('image/png')
-            const pdf = new jsPDF('p', 'mm', 'a4')
             
-            const imgWidth = 210
-            const pageHeight = 295
+            // 计算合适的PDF尺寸以容纳整个内容
+            const imgWidth = 210 // A4宽度
             const imgHeight = (canvas.height * imgWidth) / canvas.width
-            let heightLeft = imgHeight
             
-            let position = 0
+            // 创建自定义尺寸的PDF，高度足够容纳整个内容
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [210, Math.max(297, imgHeight + 20)] // 最小A4高度，或根据内容调整
+            })
             
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-            heightLeft -= pageHeight
-            
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight
-                pdf.addPage()
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-                heightLeft -= pageHeight
-            }
+            // 将整个图片添加到单页PDF中
+            pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight)
             
             pdf.save('document.pdf')
         } catch (error) {
