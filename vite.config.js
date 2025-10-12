@@ -4,12 +4,12 @@ import { createHash } from 'crypto'
 
 export default defineConfig(({ command, mode }) => {
   // 加载本地环境变量
-  const env = loadEnv(mode, process.cwd(), '')
+  const dEnv = loadEnv(mode, process.cwd(), '')
   
   // 创建兼容 Cloudflare Pages 的环境变量获取函数
   const getEnvVar = (key) => {
     // 优先使用 Cloudflare 注入的环境变量，然后是本地 .env 文件
-    return process.env[key] || env[key]
+    return evn?.[key] || process.env[key] || dEnv[key]
   }
   
   return {
