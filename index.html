@@ -1,49 +1,90 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <!-- 基础SEO标签 - 将通过JavaScript动态更新 -->
     <title>Markdown 转换工具 - 在线 Markdown 编辑器和转换器</title>
-    <meta name="description" content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。">
-    <meta name="keywords" content="Markdown编辑器,在线编辑器,Markdown转换,PDF导出,图片导出,数学公式,代码高亮,实时预览">
-    <meta name="author" content="blackmady">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="zh-CN">
-    
+    <meta
+      name="description"
+      content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。"
+    />
+    <meta
+      name="keywords"
+      content="Markdown编辑器,在线编辑器,Markdown转换,PDF导出,图片导出,数学公式,代码高亮,实时预览"
+    />
+    <meta name="author" content="blackmady" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="zh-CN" />
+
     <!-- Open Graph 标签 - 将通过JavaScript动态更新 -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Markdown 转换工具 - 在线 Markdown 编辑器和转换器">
-    <meta property="og:description" content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。">
-    <meta property="og:url" content="https://md.pgit.top">
-    <meta property="og:site_name" content="MD2IMG">
-    <meta property="og:locale" content="zh_CN">
-    
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Markdown 转换工具 - 在线 Markdown 编辑器和转换器"
+    />
+    <meta
+      property="og:description"
+      content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。"
+    />
+    <meta property="og:url" content="https://md.pgit.top" />
+    <meta property="og:site_name" content="MD2IMG" />
+    <meta property="og:locale" content="zh_CN" />
+
     <!-- Twitter Card 标签 - 将通过JavaScript动态更新 -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Markdown 转换工具 - 在线 Markdown 编辑器和转换器">
-    <meta name="twitter:description" content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。">
-    <meta name="twitter:creator" content="@blackmady">
-    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Markdown 转换工具 - 在线 Markdown 编辑器和转换器"
+    />
+    <meta
+      name="twitter:description"
+      content="功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。"
+    />
+    <meta name="twitter:creator" content="@blackmady" />
+
     <!-- 网站图标 -->
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
-    <link rel="manifest" href="./site.webmanifest">
-    
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./favicon-16x16.png"
+    />
+    <link rel="manifest" href="./site.webmanifest" />
+
     <!-- 样式表 -->
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-    
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+      id="hljs-light"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      id="hljs-dark"
+      disabled
+    />
+
     <!-- 国际化脚本 -->
     <script src="./i18n.js" defer></script>
-    
+
     <!-- 结构化数据 - 将通过JavaScript动态更新 -->
     <script type="application/ld+json">
-    {
+      {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Markdown 转换工具 - 在线 Markdown 编辑器和转换器",
@@ -52,211 +93,530 @@
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Web Browser",
         "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "CNY"
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "CNY"
         },
         "author": {
-            "@type": "Person",
-            "name": "blackmady"
+          "@type": "Person",
+          "name": "blackmady"
         },
         "publisher": {
-            "@type": "Organization",
-            "name": "blackmady"
+          "@type": "Organization",
+          "name": "blackmady"
         },
         "featureList": [
-            "实时Markdown预览",
-            "数学公式支持",
-            "代码语法高亮",
-            "多格式导出(HTML/PDF/PNG/JPG/WEBP)",
-            "暗黑模式",
-            "目录导航",
-            "文件管理"
+          "实时Markdown预览",
+          "数学公式支持",
+          "代码语法高亮",
+          "多格式导出(HTML/PDF/PNG/JPG/WEBP)",
+          "暗黑模式",
+          "目录导航",
+          "文件管理"
         ]
-    }
+      }
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="app-container">
-        <!-- 工具栏 -->
-        <div class="toolbar">
-            <div class="toolbar-left">
-                <button id="toggleToc" class="toolbar-btn" title="切换目录" data-i18n-title="toolbar.toggleToc">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z"/>
-                    </svg>
-                </button>
-                <button id="toggleFullscreen" class="toolbar-btn" title="全屏编辑" data-i18n-title="toolbar.fullscreen">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-                    </svg>
-                </button>
-                <div class="toolbar-divider"></div>
-                <button id="newFile" class="toolbar-btn" title="新建文件" data-i18n-title="toolbar.newFile">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                    </svg>
-                </button>
-                <button id="openFile" class="toolbar-btn" title="打开文件" data-i18n-title="toolbar.openFile">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
-                    </svg>
-                </button>
-                <button id="saveFile" class="toolbar-btn" title="保存文件" data-i18n-title="toolbar.saveFile">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z"/>
-                    </svg>
-                </button>
-                <div class="history-dropdown">
-                    <button id="historyBtn" class="toolbar-btn" title="历史文档" data-i18n-title="toolbar.history">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3"/>
-                        </svg>
-                    </button>
-                    <div class="history-menu">
-                        <div class="history-header">
-                            <span data-i18n="history.title">历史文档</span>
-                        </div>
-                        <div class="history-list" id="historyList">
-                            <div class="history-empty" data-i18n="history.empty">暂无保存的文档</div>
-                        </div>
-                    </div>
+      <!-- 工具栏 -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button
+            id="toggleToc"
+            class="toolbar-btn"
+            title="切换目录"
+            data-i18n-title="toolbar.toggleToc"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z"
+              />
+            </svg>
+          </button>
+          <button
+            id="toggleFullscreen"
+            class="toolbar-btn"
+            title="全屏编辑"
+            data-i18n-title="toolbar.fullscreen"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"
+              />
+            </svg>
+          </button>
+          <div class="toolbar-divider"></div>
+          <button
+            id="newFile"
+            class="toolbar-btn"
+            title="新建文件"
+            data-i18n-title="toolbar.newFile"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+              />
+            </svg>
+          </button>
+          <button
+            id="openFile"
+            class="toolbar-btn"
+            title="打开文件"
+            data-i18n-title="toolbar.openFile"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"
+              />
+            </svg>
+          </button>
+          <button
+            id="saveFile"
+            class="toolbar-btn"
+            title="保存文件"
+            data-i18n-title="toolbar.saveFile"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z"
+              />
+            </svg>
+          </button>
+          <div class="history-dropdown">
+            <button
+              id="historyBtn"
+              class="toolbar-btn"
+              title="历史文档"
+              data-i18n-title="toolbar.history"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3"
+                />
+              </svg>
+            </button>
+            <div class="history-menu">
+              <div class="history-header">
+                <span data-i18n="history.title">历史文档</span>
+              </div>
+              <div class="history-list" id="historyList">
+                <div class="history-empty" data-i18n="history.empty">
+                  暂无保存的文档
                 </div>
+              </div>
             </div>
-            <div class="toolbar-center">
-                <span class="app-title" data-i18n="appTitle">Markdown 转换工具</span>
+          </div>
+        </div>
+        <div class="toolbar-center">
+          <span class="app-title" data-i18n="appTitle">Markdown 转换工具</span>
+        </div>
+        <div class="toolbar-right">
+          <a
+            href="https://github.com/blackmady/markdown-to-image"
+            target="_blank"
+            class="github-star-link"
+            title="GitHub Star"
+            data-i18n-title="toolbar.githubStar"
+          >
+            <img
+              src="https://img.shields.io/github/stars/blackmady/markdown-to-image?style=social"
+              alt="GitHub Stars"
+            />
+          </a>
+          <div class="export-dropdown">
+            <button
+              id="exportBtn"
+              class="toolbar-btn"
+              title="导出"
+              data-i18n-title="toolbar.export"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                />
+              </svg>
+              <span data-i18n="toolbar.export">导出</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M7,10L12,15L17,10H7Z" />
+              </svg>
+            </button>
+            <div class="export-menu">
+              <button data-format="markdown" data-i18n="export.markdown">
+                导出 Markdown
+              </button>
+              <button data-format="html" data-i18n="export.html">
+                导出 HTML
+              </button>
+              <button data-format="pdf" data-i18n="export.pdf">导出 PDF</button>
+              <button data-format="png" data-i18n="export.png">导出 PNG</button>
+              <button data-format="jpg" data-i18n="export.jpg">导出 JPG</button>
+              <button data-format="webp" data-i18n="export.webp">
+                导出 WEBP
+              </button>
             </div>
-            <div class="toolbar-right">
-                <a href="https://github.com/blackmady/markdown-to-image" target="_blank" class="github-star-link" title="GitHub Star" data-i18n-title="toolbar.githubStar">
-                    <img src="https://img.shields.io/github/stars/blackmady/markdown-to-image?style=social" alt="GitHub Stars">
-                </a>
-                <div class="export-dropdown">
-                    <button id="exportBtn" class="toolbar-btn" title="导出" data-i18n-title="toolbar.export">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                        </svg>
-                        <span data-i18n="toolbar.export">导出</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M7,10L12,15L17,10H7Z"/>
-                        </svg>
-                    </button>
-                    <div class="export-menu">
-                        <button data-format="markdown" data-i18n="export.markdown">导出 Markdown</button>
-                        <button data-format="html" data-i18n="export.html">导出 HTML</button>
-                        <button data-format="pdf" data-i18n="export.pdf">导出 PDF</button>
-                        <button data-format="png" data-i18n="export.png">导出 PNG</button>
-                        <button data-format="jpg" data-i18n="export.jpg">导出 JPG</button>
-                        <button data-format="webp" data-i18n="export.webp">导出 WEBP</button>
-                    </div>
-                </div>
-                <div class="toolbar-divider"></div>
-                <div class="language-selector">
-                    <button id="languageBtn" class="toolbar-btn" title="选择语言" data-i18n-title="toolbar.language">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07Z"/>
-                        </svg>
-                        <span id="currentLanguage">中文</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M7,10L12,15L17,10H7Z"/>
-                        </svg>
-                    </button>
-                    <div class="language-menu">
-                        <button data-lang="zh-CN">简体中文</button>
-                        <button data-lang="zh-TW">繁體中文</button>
-                        <button data-lang="en">English</button>
-                    </div>
-                </div>
-                <div class="toolbar-divider"></div>
-                <button id="toggleTheme" class="toolbar-btn" title="切换主题" data-i18n-title="toolbar.theme">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.4 6.35,17.41C9.37,20.43 14,20.54 17.33,17.97Z"/>
-                    </svg>
-                </button>
+          </div>
+          <div class="toolbar-divider"></div>
+          <div class="language-selector">
+            <button
+              id="languageBtn"
+              class="toolbar-btn"
+              title="选择语言"
+              data-i18n-title="toolbar.language"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07Z"
+                />
+              </svg>
+              <span id="currentLanguage">中文</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M7,10L12,15L17,10H7Z" />
+              </svg>
+            </button>
+            <div class="language-menu">
+              <button data-lang="zh-CN">简体中文</button>
+              <button data-lang="zh-TW">繁體中文</button>
+              <button data-lang="en">English</button>
             </div>
+          </div>
+          <div class="toolbar-divider"></div>
+          <button
+            id="toggleTheme"
+            class="toolbar-btn"
+            title="切换主题"
+            data-i18n-title="toolbar.theme"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.4 6.35,17.41C9.37,20.43 14,20.54 17.33,17.97Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="editor-toolbar">
+        <div class="toolbar-group">
+          <button class="editor-toolbar-btn" data-action="bold" title="粗体">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M13.5,15.5H10V12.5H13.5A1.5,1.5 0 0,1 15,14A1.5,1.5 0 0,1 13.5,15.5M10,6.5H13A1.5,1.5 0 0,1 14.5,8A1.5,1.5 0 0,1 13,9.5H10M15.6,10.79C16.57,10.11 17.25,9.02 17.25,8C17.25,5.74 15.5,4 13.25,4H7V18H14.04C16.14,18 17.75,16.3 17.75,14.21C17.75,12.69 16.89,11.39 15.6,10.79Z"
+              />
+            </svg>
+          </button>
+          <button class="editor-toolbar-btn" data-action="italic" title="斜体">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z"
+              />
+            </svg>
+          </button>
+          <button
+            class="editor-toolbar-btn"
+            data-action="strikethrough"
+            title="删除线"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M3,14H21V12H3M5,4V7H10V10H14V7H19V4M10,19H14V16H10V19Z"
+              />
+            </svg>
+          </button>
+          <button
+            class="editor-toolbar-btn"
+            data-action="code"
+            title="行内代码"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"
+              />
+            </svg>
+          </button>
         </div>
 
-        <!-- 主内容区域 -->
-        <div class="main-content">
-            <!-- 目录侧边栏 -->
-            <div class="toc-sidebar" id="tocSidebar">
-                <div class="toc-header">
-                    <h3 data-i18n="toc.title">目录</h3>
-                    <button id="closeToc" class="close-btn">×</button>
-                </div>
-                <div class="toc-content" id="tocContent">
-                    <p class="toc-empty" data-i18n="toc.empty">暂无目录</p>
-                </div>
-            </div>
+        <div class="toolbar-divider"></div>
 
-            <!-- 编辑器和预览区域 -->
-            <div class="editor-container">
-                <div class="editor-panel">
-                    <div class="panel-header">
-                        <span data-i18n="editor.title">Markdown 编辑器</span>
-                        <div class="panel-actions">
-                            <button id="wordWrap" class="panel-btn" title="自动换行" data-i18n-title="editor.wordWrap">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M4,6H20V4H4V6M4,11H15V9H4V11M4,16H20V14H4V16M4,21H15V19H4V21Z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="editor-wrapper">
-                        <div id="editor"></div>
-                    </div>
-                </div>
-
-                <div class="preview-panel">
-                    <div class="panel-header">
-                        <span data-i18n="preview.title">预览</span>
-                        <div class="panel-actions">
-                            <button id="syncScroll" class="panel-btn active" title="同步滚动" data-i18n-title="preview.syncScroll">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16Z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="preview-wrapper">
-                        <div id="preview" class="markdown-body"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="toolbar-group">
+          <button class="editor-toolbar-btn" data-action="h1" title="一级标题">
+            H1
+          </button>
+          <button class="editor-toolbar-btn" data-action="h2" title="二级标题">
+            H2
+          </button>
+          <button class="editor-toolbar-btn" data-action="h3" title="三级标题">
+            H3
+          </button>
         </div>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="toolbar-group">
+          <button class="editor-toolbar-btn" data-action="ul" title="无序列表">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z"
+              />
+            </svg>
+          </button>
+          <button class="editor-toolbar-btn" data-action="ol" title="有序列表">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M7,13V11H21V13H7M7,19V17H21V19H7M7,7V5H21V7H7M3,8V5H2V4H4V8H3M2,17V16H5V20H2V19H4V18.5H3V17.5H4V17H2M4.25,10A0.75,0.75 0 0,1 5,10.75C5,10.95 4.92,11.14 4.79,11.27L3.12,13H5V14H2V13.08L4,11H2V10H4.25Z"
+              />
+            </svg>
+          </button>
+          <button class="editor-toolbar-btn" data-action="quote" title="引用">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"
+              />
+            </svg>
+          </button>
+          <button
+            class="editor-toolbar-btn"
+            data-action="codeblock"
+            title="代码块"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="toolbar-group">
+          <button class="editor-toolbar-btn" data-action="link" title="链接">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z"
+              />
+            </svg>
+          </button>
+          <button class="editor-toolbar-btn" data-action="image" title="图片">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"
+              />
+            </svg>
+          </button>
+          <button class="editor-toolbar-btn" data-action="table" title="表格">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M5,4H19A2,2 0 0,1 21,6V18A2,2 0 0,1 19,20H5A2,2 0 0,1 3,18V6A2,2 0 0,1 5,4M5,8V12H11V8H5M13,8V12H19V8H13M5,14V18H11V14H5M13,14V18H19V14H13Z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="toolbar-group">
+          <div class="dropdown">
+            <button
+              class="editor-toolbar-btn dropdown-btn"
+              title="插入Mermaid图表"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M2,2V4H4V2H2M20,2V4H22V2H20M2,10V12H4V10H2M20,10V12H22V10H20M2,18V20H4V18H2M20,18V20H22V18H20M8,2V4H16V2H8M8,18V20H16V18H8M2,6V8H4V6H2M20,6V8H22V6H20M2,14V16H4V14H2M20,14V16H22V14H20M6,2V4H8V2H6M16,2V4H18V2H16M6,18V20H8V18H6M16,18V20H18V18H16M10,6H14V10H10V6M10,14H14V18H10V14Z"
+                />
+              </svg>
+              Mermaid
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" data-action="mermaid-flowchart">
+                流程图
+              </button>
+              <button class="dropdown-item" data-action="mermaid-sequence">
+                序列图
+              </button>
+              <button class="dropdown-item" data-action="mermaid-gantt">
+                甘特图
+              </button>
+              <button class="dropdown-item" data-action="mermaid-pie">
+                饼图
+              </button>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <button
+              class="editor-toolbar-btn dropdown-btn"
+              title="插入LaTeX公式"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M2,7L13,2L22,7L13,12L2,7M20,10V17L13,20L6,17V10L13,15L20,10Z"
+                />
+              </svg>
+              LaTeX
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" data-action="latex-inline">
+                行内公式
+              </button>
+              <button class="dropdown-item" data-action="latex-block">
+                块级公式
+              </button>
+              <button class="dropdown-item" data-action="latex-fraction">
+                分数
+              </button>
+              <button class="dropdown-item" data-action="latex-integral">
+                积分
+              </button>
+              <button class="dropdown-item" data-action="latex-matrix">
+                矩阵
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 主内容区域 -->
+      <div class="main-content">
+        <!-- 富文本编辑工具栏 -->
+
+        <!-- 编辑器和预览区域 -->
+        <div class="editor-container">
+          <!-- 目录侧边栏 -->
+          <div class="toc-sidebar" id="tocSidebar">
+            <div class="toc-header">
+              <h3 data-i18n="toc.title">目录</h3>
+              <button id="closeToc" class="close-btn">×</button>
+            </div>
+            <div class="toc-content" id="tocContent">
+              <p class="toc-empty" data-i18n="toc.empty">暂无目录</p>
+            </div>
+          </div>
+          <div class="editor-panel">
+            <div class="panel-header">
+              <span data-i18n="editor.title">Markdown 编辑器</span>
+              <div class="panel-actions">
+                <button
+                  id="wordWrap"
+                  class="panel-btn"
+                  title="自动换行"
+                  data-i18n-title="editor.wordWrap"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M4,6H20V4H4V6M4,11H15V9H4V11M4,16H20V14H4V16M4,21H15V19H4V21Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="editor-wrapper">
+              <div id="editor"></div>
+            </div>
+          </div>
+
+          <div class="preview-panel">
+            <div class="panel-header">
+              <span data-i18n="preview.title">预览</span>
+              <div class="panel-actions">
+                <button
+                  id="syncScroll"
+                  class="panel-btn active"
+                  title="同步滚动"
+                  data-i18n-title="preview.syncScroll"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="preview-wrapper">
+              <div id="preview" class="markdown-body"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 文件输入 -->
-    <input type="file" id="fileInput" accept=".md,.txt" style="display: none;">
+    <input type="file" id="fileInput" accept=".md,.txt" style="display: none" />
 
     <!-- 自定义通知容器 -->
     <div id="notificationContainer" class="notification-container"></div>
 
     <script>
-    const titleElement = document.querySelector('.app-title')
-    if (titleElement) {
+      const titleElement = document.querySelector(".app-title");
+      if (titleElement) {
         // 检查是否是首次加载
-        const isFirstVisit = !localStorage.getItem('hasVisited')
-        
+        const isFirstVisit = !localStorage.getItem("hasVisited");
+
         if (isFirstVisit) {
-            titleElement.textContent = '仅首次加载耗时较长，稍安勿躁...'
-            // 标记已访问
-            localStorage.setItem('hasVisited', 'true')
+          titleElement.textContent = "仅首次加载耗时较长，稍安勿躁...";
+          // 标记已访问
+          localStorage.setItem("hasVisited", "true");
         } else {
-            titleElement.textContent = 'Markdown 转换工具-加载中...'
+          titleElement.textContent = "Markdown 转换工具-加载中...";
         }
-    }
+      }
     </script>
 
     <script type="module" src="./main.js"></script>
-    
+
     <!-- 国际化初始化 -->
     <script>
-        // 页面加载完成后初始化国际化
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof initI18n === 'function') {
-                initI18n();
-            }
-        });
+      // 页面加载完成后初始化国际化
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof initI18n === "function") {
+          initI18n();
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

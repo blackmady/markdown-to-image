@@ -347,33 +347,188 @@ class MarkdownEditor {
     }
 
     setupEventListeners() {
-        // 工具栏按钮
+        // 工具栏按钮事件
         document.getElementById('toggleToc').addEventListener('click', () => this.toggleToc())
         document.getElementById('toggleFullscreen').addEventListener('click', () => this.toggleFullscreen())
         document.getElementById('toggleTheme').addEventListener('click', () => this.toggleTheme())
         document.getElementById('newFile').addEventListener('click', () => this.newFile())
         document.getElementById('openFile').addEventListener('click', () => this.openFile())
         document.getElementById('saveFile').addEventListener('click', () => this.saveFile())
-        document.getElementById('closeToc').addEventListener('click', () => this.toggleToc())
-        
-        // 面板按钮
         document.getElementById('syncScroll').addEventListener('click', () => this.toggleSyncScroll())
         document.getElementById('wordWrap').addEventListener('click', () => this.toggleWordWrap())
-        
-        // 导出功能
-        this.setupExportMenu()
-        
-        // 历史文档功能
-        this.setupHistoryMenu()
-        
-        // 语言切换功能
-        this.setupLanguageSelector()
-        
-        // 文件输入
+        document.getElementById('closeToc').addEventListener('click', () => this.toggleToc())
+
+        // 文件输入事件
         document.getElementById('fileInput').addEventListener('change', (e) => this.handleFileLoad(e))
-        
+
         // 键盘快捷键
         document.addEventListener('keydown', (e) => this.handleKeyboard(e))
+
+        // 设置语言选择器
+        this.setupLanguageSelector()
+        
+        // 设置导出菜单
+        this.setupExportMenu()
+        
+        // 设置历史菜单
+        this.setupHistoryMenu()
+        
+        // 设置富文本编辑器工具栏
+        this.setupEditorToolbar()
+    }
+
+    // 设置富文本编辑器工具栏
+    setupEditorToolbar() {
+        const toolbar = document.querySelector('.editor-toolbar')
+        if (!toolbar) return
+
+        // 绑定所有工具栏按钮事件
+        toolbar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.editor-toolbar-btn, .dropdown-item')
+            if (!btn) return
+
+            const action = btn.dataset.action
+            if (action) {
+                this.handleToolbarAction(action)
+            }
+        })
+    }
+
+    // 处理工具栏操作
+    handleToolbarAction(action) {
+        const editor = this.editor
+        if (!editor) return
+
+        const state = editor.state
+        const selection = state.selection.main
+        const selectedText = state.doc.sliceString(selection.from, selection.to)
+
+        let insertText = ''
+        let cursorOffset = 0
+
+        switch (action) {
+            case 'bold':
+                insertText = `**${selectedText || '粗体文本'}**`
+                cursorOffset = selectedText ? 0 : -4
+                break
+            case 'italic':
+                insertText = `*${selectedText || '斜体文本'}*`
+                cursorOffset = selectedText ? 0 : -3
+                break
+            case 'strikethrough':
+                insertText = `~~${selectedText || '删除线文本'}~~`
+                cursorOffset = selectedText ? 0 : -5
+                break
+            case 'code':
+                insertText = `\`${selectedText || '代码'}\``
+                cursorOffset = selectedText ? 0 : -2
+                break
+            case 'h1':
+                insertText = `# ${selectedText || '一级标题'}`
+                cursorOffset = selectedText ? 0 : -4
+                break
+            case 'h2':
+                insertText = `## ${selectedText || '二级标题'}`
+                cursorOffset = selectedText ? 0 : -4
+                break
+            case 'h3':
+                insertText = `### ${selectedText || '三级标题'}`
+                cursorOffset = selectedText ? 0 : -4
+                break
+            case 'ul':
+                insertText = `- ${selectedText || '列表项'}`
+                cursorOffset = selectedText ? 0 : -3
+                break
+            case 'ol':
+                insertText = `1. ${selectedText || '列表项'}`
+                cursorOffset = selectedText ? 0 : -3
+                break
+            case 'quote':
+                insertText = `> ${selectedText || '引用文本'}`
+                cursorOffset = selectedText ? 0 : -4
+                break
+            case 'codeblock':
+                insertText = `\`\`\`\n${selectedText || '代码块'}\n\`\`\``
+                cursorOffset = selectedText ? 0 : -5
+                break
+            case 'link':
+                insertText = `[${selectedText || '链接文本'}](url)`
+                cursorOffset = selectedText ? -5 : -9
+                break
+            case 'image':
+                insertText = `![${selectedText || '图片描述'}](图片链接)`
+                cursorOffset = selectedText ? -7 : -11
+                break
+            case 'table':
+                insertText = `| 列1 | 列2 | 列3 |\n|-----|-----|-----|\n| 内容1 | 内容2 | 内容3 |`
+                cursorOffset = 0
+                break
+            case 'mermaid-flowchart':
+                insertText = `\`\`\`mermaid\ngraph TD\n    A[开始] --> B{判断条件}\n    B -->|是| C[执行操作]\n    B -->|否| D[其他操作]\n    C --> E[结束]\n    D --> E\n\`\`\``
+                cursorOffset = 0
+                break
+            case 'mermaid-sequence':
+                insertText = `\`\`\`mermaid\nsequenceDiagram\n    participant A as 用户\n    participant B as 系统\n    A->>B: 发送请求\n    B-->>A: 返回响应\n\`\`\``
+                cursorOffset = 0
+                break
+            case 'mermaid-gantt':
+                insertText = `\`\`\`mermaid\ngantt\n    title 项目进度\n    dateFormat  YYYY-MM-DD\n    section 阶段1\n    任务1    :done, des1, 2024-01-01, 2024-01-15\n    任务2    :active, des2, 2024-01-16, 3d\n    section 阶段2\n    任务3    :des3, after des2, 5d\n\`\`\``
+                cursorOffset = 0
+                break
+            case 'mermaid-pie':
+                insertText = `\`\`\`mermaid\npie title 数据分布\n    "类别A" : 42.96\n    "类别B" : 50.05\n    "类别C" : 10.01\n\`\`\``
+                cursorOffset = 0
+                break
+            case 'latex-inline':
+                insertText = `$${selectedText || 'E = mc^2'}$`
+                cursorOffset = selectedText ? 0 : -1
+                break
+            case 'latex-block':
+                insertText = `$$\n${selectedText || '\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}'}\n$$`
+                cursorOffset = selectedText ? 0 : -4
+                break
+            case 'latex-fraction':
+                insertText = `$\\frac{${selectedText || 'a'}}{b}$`
+                cursorOffset = selectedText ? -3 : -5
+                break
+            case 'latex-integral':
+                insertText = `$\\int_{${selectedText || 'a'}}^{b} f(x) dx$`
+                cursorOffset = selectedText ? -12 : -14
+                break
+            case 'latex-matrix':
+                insertText = `$$\n\\begin{pmatrix}\na & b \\\\\nc & d\n\\end{pmatrix}\n$$`
+                cursorOffset = 0
+                break
+            default:
+                return
+        }
+
+        // 插入文本到编辑器
+        this.insertTextAtCursor(insertText, cursorOffset)
+    }
+
+    // 在光标位置插入文本
+    insertTextAtCursor(text, cursorOffset = 0) {
+        const editor = this.editor
+        if (!editor) return
+
+        const state = editor.state
+        const selection = state.selection.main
+        
+        // 如果有选中文本，替换选中的文本
+        const from = selection.from
+        const to = selection.to
+        
+        const transaction = state.update({
+            changes: { from, to, insert: text },
+            selection: { 
+                anchor: from + text.length + cursorOffset, 
+                head: from + text.length + cursorOffset 
+            }
+        })
+        
+        editor.dispatch(transaction)
+        editor.focus()
     }
 
     setupLanguageSelector() {
