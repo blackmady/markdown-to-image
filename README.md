@@ -134,7 +134,7 @@ md2img/
 
 ## 📄 许可证
 
-MIT License
+GPLv3 License
 
 ## 🔗 相关链接
 

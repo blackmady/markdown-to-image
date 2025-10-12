@@ -18,7 +18,7 @@
     "editor"
   ],
   "author": "blackmady",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "devDependencies": {
     "vite": "^5.0.0",
     "wrangler": "^3.0.0"
