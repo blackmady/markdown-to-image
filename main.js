@@ -1274,7 +1274,7 @@ sequenceDiagram
         })
     }
 
-    // 清理HTML内容，去除可能导致样式冲突的类名和属性
+    // 清理HTML内容，去除可能导致样式冲突的类名和属性，但保留 Mermaid 图表的样式
     cleanElementForExport(html) {
         // 创建临时div来处理HTML
         const tempDiv = document.createElement('div')
@@ -1283,6 +1283,18 @@ sequenceDiagram
         // 递归清理所有元素
         const cleanElement = (element) => {
             if (element.nodeType === Node.ELEMENT_NODE) {
+                // 如果是 Mermaid 图表容器，保留其结构和样式
+                if (element.classList.contains('mermaid-diagram')) {
+                    // 保留 Mermaid 图表的完整结构，不进行清理
+                    return
+                }
+                
+                // 如果是 SVG 元素（Mermaid 图表的一部分），保留其样式
+                if (element.tagName === 'SVG' || element.closest('.mermaid-diagram')) {
+                    // 保留 SVG 及其子元素的所有属性和样式
+                    return
+                }
+                
                 // 移除所有class属性
                 element.removeAttribute('class')
                 // 移除style属性中可能包含现代颜色函数的部分
@@ -1304,6 +1316,17 @@ sequenceDiagram
         return tempDiv.innerHTML
     }
 
+    // 为导出准备 Mermaid 图表，确保主题一致
+    async prepareElementForExport(element) {
+        // 克隆元素以避免影响原始预览
+        const clonedElement = element.cloneNode(true)
+        
+        // 重新渲染 Mermaid 图表以确保主题一致
+        await this.renderMermaid(clonedElement)
+        
+        return clonedElement
+    }
+
     async exportFile(format) {
         const previewElement = document.getElementById('preview')
         
@@ -1321,9 +1344,7 @@ sequenceDiagram
                     notify.success('Markdown 文件导出成功')
                     break
                 case 'html':
-                    const htmlContent = previewElement.innerHTML
-                    const htmlBlob = new Blob([htmlContent], { type: 'text/html' })
-                    saveAs(htmlBlob, 'document.html')
+                    await this.exportHTML(previewElement)
                     notify.success('HTML 文件导出成功')
                     break
                 case 'pdf':
@@ -1346,38 +1367,56 @@ sequenceDiagram
         }
     }
 
-    async exportHTML(content) {
-        const html = marked(content)
-        const sanitizedHtml = DOMPurify.sanitize(html)
-        
-        const fullHtml = `<!DOCTYPE html>
+    async exportHTML(element) {
+        try {
+            // 准备导出元素，确保 Mermaid 图表主题一致
+            const preparedElement = await this.prepareElementForExport(element)
+            
+            // 获取清理后的内容，保留 Mermaid 图表样式
+            const cleanContent = this.cleanElementForExport(preparedElement.innerHTML)
+            
+            const fullHtml = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/${this.isDarkMode ? 'github-dark' : 'github'}.min.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: ${this.isDarkMode ? '#ffffff' : '#333'};
+            background-color: ${this.isDarkMode ? '#1a1a1a' : '#ffffff'};
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
         ${this.getMarkdownCSS()}
+        /* Mermaid 图表样式 */
+        .mermaid-diagram {
+            text-align: center;
+            margin: 1em 0;
+        }
+        .mermaid-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <div class="markdown-body">
-        ${sanitizedHtml}
+        ${cleanContent}
     </div>
 </body>
 </html>`
-        
-        const blob = new Blob([fullHtml], { type: 'text/html' })
-        saveAs(blob, 'document.html')
+            
+            const blob = new Blob([fullHtml], { type: 'text/html' })
+            saveAs(blob, 'document.html')
+        } catch (error) {
+            console.error('HTML导出失败:', error)
+            throw error
+        }
     }
 
     async exportPDF(element) {
@@ -1386,6 +1425,9 @@ sequenceDiagram
             if (!element || element.children.length === 0) {
                 throw new Error('预览内容为空，无法导出PDF')
             }
+
+            // 准备导出元素，确保 Mermaid 图表主题一致
+            const preparedElement = await this.prepareElementForExport(element)
 
             // 根据当前主题设置背景颜色
             const backgroundColor = this.isDarkMode ? '#1a1a1a' : '#ffffff'
@@ -1483,6 +1525,15 @@ sequenceDiagram
                             max-width: 100%;
                             height: auto;
                         }
+                        /* Mermaid 图表样式 */
+                        .mermaid-diagram {
+                            text-align: center;
+                            margin: 1em 0;
+                        }
+                        .mermaid-diagram svg {
+                            max-width: 100%;
+                            height: auto;
+                        }
                     </style>
                 </head>
                 <body>
@@ -1501,9 +1552,9 @@ sequenceDiagram
                 }
             })
             
-            // 将内容复制到iframe中，去除所有样式类
+            // 将内容复制到iframe中，保留 Mermaid 图表的样式
             const contentDiv = iframeDoc.getElementById('content')
-            const cleanContent = this.cleanElementForExport(element.innerHTML)
+            const cleanContent = this.cleanElementForExport(preparedElement.innerHTML)
             contentDiv.innerHTML = cleanContent
             
             const canvas = await html2canvas(contentDiv, {
@@ -1553,6 +1604,9 @@ sequenceDiagram
                 throw new Error('预览内容为空，无法导出图片')
             }
 
+            // 准备导出元素，确保 Mermaid 图表主题一致
+            const preparedElement = await this.prepareElementForExport(element)
+
             // 根据当前主题设置背景颜色
             const backgroundColor = this.isDarkMode ? '#1a1a1a' : '#ffffff'
             const textColor = this.isDarkMode ? '#ffffff' : '#000000'
@@ -1649,6 +1703,15 @@ sequenceDiagram
                             max-width: 100%;
                             height: auto;
                         }
+                        /* Mermaid 图表样式 */
+                        .mermaid-diagram {
+                            text-align: center;
+                            margin: 1em 0;
+                        }
+                        .mermaid-diagram svg {
+                            max-width: 100%;
+                            height: auto;
+                        }
                     </style>
                 </head>
                 <body>
@@ -1667,9 +1730,9 @@ sequenceDiagram
                 }
             })
             
-            // 将内容复制到iframe中，去除所有样式类
+            // 将内容复制到iframe中，保留 Mermaid 图表的样式
             const contentDiv = iframeDoc.getElementById('content')
-            const cleanContent = this.cleanElementForExport(element.innerHTML)
+            const cleanContent = this.cleanElementForExport(preparedElement.innerHTML)
             contentDiv.innerHTML = cleanContent
             
             const canvas = await html2canvas(contentDiv, {
