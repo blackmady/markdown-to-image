@@ -1763,23 +1763,74 @@ sequenceDiagram
     }
 
     getMarkdownCSS() {
+        const isDark = this.isDarkMode
         return `
         .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
             margin-top: 24px;
             margin-bottom: 16px;
             font-weight: 600;
             line-height: 1.25;
+            color: ${isDark ? '#ffffff' : '#24292e'};
         }
-        .markdown-body h1 { font-size: 2em; border-bottom: 1px solid #eaecef; padding-bottom: 8px; }
-        .markdown-body h2 { font-size: 1.5em; border-bottom: 1px solid #eaecef; padding-bottom: 8px; }
+        .markdown-body h1 { 
+            font-size: 2em; 
+            border-bottom: 1px solid ${isDark ? '#444' : '#eaecef'}; 
+            padding-bottom: 8px; 
+        }
+        .markdown-body h2 { 
+            font-size: 1.5em; 
+            border-bottom: 1px solid ${isDark ? '#444' : '#eaecef'}; 
+            padding-bottom: 8px; 
+        }
         .markdown-body h3 { font-size: 1.25em; }
-        .markdown-body p { margin-bottom: 16px; }
-        .markdown-body blockquote { padding: 0 16px; margin: 0 0 16px 0; color: #6a737d; border-left: 4px solid #dfe2e5; }
-        .markdown-body code { padding: 2px 4px; font-size: 85%; background-color: rgba(27,31,35,0.05); border-radius: 3px; }
-        .markdown-body pre { padding: 16px; overflow: auto; font-size: 85%; line-height: 1.45; background-color: #f6f8fa; border-radius: 6px; }
-        .markdown-body table { border-spacing: 0; border-collapse: collapse; margin-bottom: 16px; }
-        .markdown-body table th, .markdown-body table td { padding: 6px 13px; border: 1px solid #dfe2e5; }
-        .markdown-body table th { font-weight: 600; background-color: #f6f8fa; }
+        .markdown-body p { 
+            margin-bottom: 16px; 
+            color: ${isDark ? '#ffffff' : '#24292e'};
+        }
+        .markdown-body blockquote { 
+            padding: 0 16px; 
+            margin: 0 0 16px 0; 
+            color: ${isDark ? '#8b949e' : '#6a737d'}; 
+            border-left: 4px solid ${isDark ? '#30363d' : '#dfe2e5'}; 
+            background-color: ${isDark ? '#161b22' : '#f6f8fa'};
+        }
+        .markdown-body code { 
+            padding: 2px 4px; 
+            font-size: 85%; 
+            background-color: ${isDark ? '#343942' : 'rgba(27,31,35,0.05)'}; 
+            color: ${isDark ? '#e6edf3' : '#24292e'};
+            border-radius: 3px; 
+        }
+        .markdown-body pre { 
+            padding: 16px; 
+            overflow: auto; 
+            font-size: 85%; 
+            line-height: 1.45; 
+            background-color: ${isDark ? '#0d1117' : '#f6f8fa'}; 
+            color: ${isDark ? '#e6edf3' : '#24292e'};
+            border-radius: 6px; 
+            border: 1px solid ${isDark ? '#30363d' : '#d1d9e0'};
+        }
+        .markdown-body table { 
+            border-spacing: 0; 
+            border-collapse: collapse; 
+            margin-bottom: 16px; 
+        }
+        .markdown-body table th, .markdown-body table td { 
+            padding: 6px 13px; 
+            border: 1px solid ${isDark ? '#30363d' : '#dfe2e5'}; 
+            color: ${isDark ? '#e6edf3' : '#24292e'};
+        }
+        .markdown-body table th { 
+            font-weight: 600; 
+            background-color: ${isDark ? '#161b22' : '#f6f8fa'}; 
+        }
+        .markdown-body ul, .markdown-body ol {
+            color: ${isDark ? '#e6edf3' : '#24292e'};
+        }
+        .markdown-body a {
+            color: ${isDark ? '#58a6ff' : '#0969da'};
+        }
         `
     }
 
