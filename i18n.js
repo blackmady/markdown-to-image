@@ -14,6 +14,7 @@ const translations = {
             export: '导出',
             share: '分享',
             githubStar: 'GitHub Star',
+            githubIssues: 'GitHub Issues',
             language: '选择语言',
             theme: '切换主题',
             // 富文本编辑器工具栏
@@ -123,6 +124,7 @@ const translations = {
             export: '匯出',
             share: '分享',
             githubStar: 'GitHub Star',
+            githubIssues: 'GitHub Issues',
             language: '選擇語言',
             theme: '切換主題',
             // 富文本編輯器工具欄
@@ -232,6 +234,7 @@ const translations = {
             export: 'Export',
             share: 'Share',
             githubStar: 'GitHub Star',
+            githubIssues: 'GitHub Issues',
             language: 'Language',
             theme: 'Toggle Theme',
             // Rich Text Editor Toolbar

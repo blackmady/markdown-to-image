@@ -1,6 +1,6 @@
 {
   "name": "md2img",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A powerful Markdown to HTML/PDF/Image converter with live preview",
   "main": "index.html",
   "scripts": {
