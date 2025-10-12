@@ -420,22 +420,25 @@ class MarkdownEditor {
     // 加载历史文档
     async loadHistoryDocument(id) {
         try {
-            const document = await this.loadDocumentFromIndexedDB(id)
-            if (document) {
+            const doc = await this.loadDocumentFromIndexedDB(id)
+            if (doc) {
                 this.editor.dispatch({
                     changes: {
                         from: 0,
                         to: this.editor.state.doc.length,
-                        insert: document.content
+                        insert: doc.content
                     }
                 })
                 this.updatePreview()
                 this.updateToc()
                 
                 // 隐藏历史菜单
-                document.querySelector('.history-dropdown').classList.remove('active')
+                const historyDropdown = document.querySelector('.history-dropdown')
+                if (historyDropdown) {
+                    historyDropdown.classList.remove('active')
+                }
                 
-                alert(`已加载文档: ${document.title}`)
+                alert(`已加载文档: ${doc.title}`)
             }
         } catch (error) {
             console.error('加载文档失败:', error)
