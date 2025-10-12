@@ -75,7 +75,14 @@ const translations = {
         history: {
             title: '历史文档',
             empty: '暂无历史文档',
-            delete: '删除'
+            delete: '删除',
+            deleteConfirm: '确定要删除这个文档吗？',
+            deleteSuccess: '文档已删除',
+            deleteFailed: '删除文档失败，请重试',
+            duplicateTitle: '标题重复',
+            overwriteConfirm: '已存在相同标题的文档，是否覆盖？',
+            overwrite: '覆盖',
+            cancel: '取消'
         },
         
         // SEO 元数据
@@ -158,11 +165,18 @@ const translations = {
             syncScroll: '同步捲動'
         },
         
-        // 历史文档
+        // 歷史文檔
         history: {
             title: '歷史文檔',
             empty: '暫無歷史文檔',
-            delete: '刪除'
+            delete: '刪除',
+            deleteConfirm: '確定要刪除這個文檔嗎？',
+            deleteSuccess: '文檔已刪除',
+            deleteFailed: '刪除文檔失敗，請重試',
+            duplicateTitle: '標題重複',
+            overwriteConfirm: '已存在相同標題的文檔，是否覆蓋？',
+            overwrite: '覆蓋',
+            cancel: '取消'
         },
         
         // SEO 元數據
@@ -245,11 +259,18 @@ const translations = {
             syncScroll: 'Sync Scroll'
         },
         
-        // 历史文档
+        // History
         history: {
             title: 'History',
             empty: 'No history documents',
-            delete: 'Delete'
+            delete: 'Delete',
+            deleteConfirm: 'Are you sure you want to delete this document?',
+            deleteSuccess: 'Document deleted',
+            deleteFailed: 'Failed to delete document, please try again',
+            duplicateTitle: 'Duplicate Title',
+            overwriteConfirm: 'A document with the same title already exists. Do you want to overwrite it?',
+            overwrite: 'Overwrite',
+            cancel: 'Cancel'
         },
         
         // SEO Metadata

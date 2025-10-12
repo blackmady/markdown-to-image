@@ -668,17 +668,19 @@ class MarkdownEditor {
 
     // 删除历史文档
     async deleteHistoryDocument(id) {
-        if (!confirm('确定要删除这个文档吗？')) {
-            return
+        // 显示删除确认对话框
+        const shouldDelete = await this.showDeleteConfirm()
+        if (!shouldDelete) {
+            return // 用户取消删除
         }
         
         try {
             await this.deleteDocumentFromIndexedDB(id)
             await this.loadHistoryList() // 重新加载列表
-            notify.success('文档已删除')
+            notify.success(t('history.deleteSuccess'))
         } catch (error) {
             console.error('删除文档失败:', error)
-            notify.error('删除文档失败，请重试')
+            notify.error(t('history.deleteFailed'))
         }
     }
 
@@ -1127,12 +1129,226 @@ sequenceDiagram
         const title = this.extractTitle(content) || '未命名文档'
         
         try {
-            await this.saveToIndexedDB(title, content)
-            notify.success('文档已保存到本地存储')
+            // 检查是否存在相同标题的文档
+            const existingDocs = await this.getDocumentsFromIndexedDB()
+            const duplicateDoc = existingDocs.find(doc => doc.title === title)
+            
+            if (duplicateDoc) {
+                // 显示覆盖确认对话框
+                const shouldOverwrite = await this.showOverwriteConfirm(title)
+                if (!shouldOverwrite) {
+                    return // 用户取消保存
+                }
+                // 更新现有文档
+                await this.saveToIndexedDB(title, content, duplicateDoc)
+            } else {
+                // 创建新文档
+                await this.saveToIndexedDB(title, content)
+            }
+            
+            notify.success(t('toolbar.saveFile') + '成功')
         } catch (error) {
             console.error('保存失败:', error)
             notify.error('保存失败，请重试')
         }
+    }
+
+    // 显示覆盖确认对话框
+    async showOverwriteConfirm(title) {
+        return new Promise((resolve) => {
+            // 创建模态对话框
+            const modal = document.createElement('div')
+            modal.className = 'modal-overlay'
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `
+            
+            const dialog = document.createElement('div')
+            dialog.className = 'confirm-dialog'
+            dialog.style.cssText = `
+                background: var(--bg-color);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 24px;
+                max-width: 400px;
+                width: 90%;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            `
+            
+            dialog.innerHTML = `
+                <h3 style="margin: 0 0 16px 0; color: var(--text-color); font-size: 18px;">
+                    ${t('history.duplicateTitle')}
+                </h3>
+                <p style="margin: 0 0 24px 0; color: var(--text-color); line-height: 1.5;">
+                    ${t('history.overwriteConfirm')}
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="cancel-btn" style="
+                        padding: 8px 16px;
+                        border: 1px solid var(--border-color);
+                        background: transparent;
+                        color: var(--text-color);
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">${t('history.cancel')}</button>
+                    <button class="confirm-btn" style="
+                        padding: 8px 16px;
+                        border: none;
+                        background: #dc3545;
+                        color: white;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">${t('history.overwrite')}</button>
+                </div>
+            `
+            
+            modal.appendChild(dialog)
+            document.body.appendChild(modal)
+            
+            // 绑定事件
+            const cancelBtn = dialog.querySelector('.cancel-btn')
+            const confirmBtn = dialog.querySelector('.confirm-btn')
+            
+            const cleanup = () => {
+                document.body.removeChild(modal)
+            }
+            
+            cancelBtn.addEventListener('click', () => {
+                cleanup()
+                resolve(false)
+            })
+            
+            confirmBtn.addEventListener('click', () => {
+                cleanup()
+                resolve(true)
+            })
+            
+            // 点击背景关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    cleanup()
+                    resolve(false)
+                }
+            })
+            
+            // ESC键关闭
+            const handleKeydown = (e) => {
+                if (e.key === 'Escape') {
+                    cleanup()
+                    resolve(false)
+                    document.removeEventListener('keydown', handleKeydown)
+                }
+            }
+            document.addEventListener('keydown', handleKeydown)
+        })
+    }
+
+    // 显示删除确认对话框
+    async showDeleteConfirm() {
+        return new Promise((resolve) => {
+            // 创建模态对话框
+            const modal = document.createElement('div')
+            modal.className = 'modal-overlay'
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `
+            
+            const dialog = document.createElement('div')
+            dialog.className = 'confirm-dialog'
+            dialog.style.cssText = `
+                background: var(--bg-color);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 24px;
+                max-width: 400px;
+                width: 90%;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            `
+            
+            dialog.innerHTML = `
+                <h3 style="margin: 0 0 16px 0; color: var(--text-color); font-size: 18px;">
+                    ${t('history.delete')}
+                </h3>
+                <p style="margin: 0 0 24px 0; color: var(--text-color); line-height: 1.5;">
+                    ${t('history.deleteConfirm')}
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="cancel-btn" style="
+                        padding: 8px 16px;
+                        border: 1px solid var(--border-color);
+                        background: transparent;
+                        color: var(--text-color);
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">${t('history.cancel')}</button>
+                    <button class="confirm-btn" style="
+                        padding: 8px 16px;
+                        border: none;
+                        background: #dc3545;
+                        color: white;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">${t('history.delete')}</button>
+                </div>
+            `
+            
+            modal.appendChild(dialog)
+            document.body.appendChild(modal)
+            
+            // 绑定事件
+            const cancelBtn = dialog.querySelector('.cancel-btn')
+            const confirmBtn = dialog.querySelector('.confirm-btn')
+            
+            const cleanup = () => {
+                document.body.removeChild(modal)
+            }
+            
+            cancelBtn.addEventListener('click', () => {
+                cleanup()
+                resolve(false)
+            })
+            
+            confirmBtn.addEventListener('click', () => {
+                cleanup()
+                resolve(true)
+            })
+            
+            // 点击背景关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    cleanup()
+                    resolve(false)
+                }
+            })
+            
+            // ESC键关闭
+            const handleKeydown = (e) => {
+                if (e.key === 'Escape') {
+                    cleanup()
+                    resolve(false)
+                    document.removeEventListener('keydown', handleKeydown)
+                }
+            }
+            document.addEventListener('keydown', handleKeydown)
+        })
     }
 
     // 从内容中提取标题
@@ -1180,7 +1396,7 @@ sequenceDiagram
     }
 
     // 保存文档到IndexedDB
-    async saveToIndexedDB(title, content) {
+    async saveToIndexedDB(title, content, existingDoc = null) {
         if (!this.db) {
             await this.initIndexedDB()
         }
@@ -1188,16 +1404,30 @@ sequenceDiagram
         const transaction = this.db.transaction(['documents'], 'readwrite')
         const store = transaction.objectStore('documents')
         
-        const document = {
-            title: title,
-            content: content,
-            createdAt: new Date(),
-            updatedAt: new Date()
+        let document
+        let request
+        
+        if (existingDoc) {
+            // 更新现有文档
+            document = {
+                ...existingDoc,
+                title: title,
+                content: content,
+                updatedAt: new Date()
+            }
+            request = store.put(document)
+        } else {
+            // 创建新文档
+            document = {
+                title: title,
+                content: content,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            }
+            request = store.add(document)
         }
         
         return new Promise((resolve, reject) => {
-            const request = store.add(document)
-            
             request.onsuccess = () => {
                 resolve(request.result)
             }
