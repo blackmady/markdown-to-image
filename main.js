@@ -10,6 +10,7 @@ import jsPDF from 'jspdf'
 import { saveAs } from 'file-saver'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
+import mermaid from 'mermaid'
 
 class MarkdownEditor {
     constructor() {
@@ -176,6 +177,7 @@ class MarkdownEditor {
         this.setupEditor()
         this.setupEventListeners()
         this.setupMarked()
+        this.setupMermaid()
         this.loadTheme()
         this.updatePreview()
         this.updateToc()
@@ -369,6 +371,15 @@ class MarkdownEditor {
         })
     }
 
+    setupMermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: this.isDarkMode ? 'dark' : 'default',
+            securityLevel: 'loose',
+            fontFamily: 'inherit'
+        })
+    }
+
     getDefaultContent() {
         return `# Markdown 转换工具
 
@@ -429,9 +440,32 @@ def hello():
 行内公式：$E = mc^2$
 
 块级公式：
-$$
-\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}
-$$
+$$ \\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi} $$
+
+### Mermaid 图表
+
+支持 Mermaid 语法绘制各种图表：
+
+\`\`\`mermaid
+graph TD
+    A[开始] --> B{是否登录?}
+    B -->|是| C[显示主页]
+    B -->|否| D[显示登录页]
+    C --> E[结束]
+    D --> E
+\`\`\`
+
+\`\`\`mermaid
+sequenceDiagram
+    participant 用户
+    participant 浏览器
+    participant 服务器
+    
+    用户->>浏览器: 输入URL
+    浏览器->>服务器: 发送请求
+    服务器->>浏览器: 返回页面
+    浏览器->>用户: 显示页面
+\`\`\`
 
 ## 开始使用
 
@@ -457,6 +491,9 @@ $$
         
         // 渲染数学公式
         this.renderMath(previewElement)
+        
+        // 渲染Mermaid图表
+        this.renderMermaid(previewElement)
     }
 
     renderMath(element) {
@@ -487,6 +524,39 @@ $$
                 return `<span class="math-error">数学公式错误: ${math}</span>`
             }
         })
+    }
+
+    async renderMermaid(element) {
+        // 查找所有mermaid代码块
+        const mermaidBlocks = element.querySelectorAll('pre code.language-mermaid')
+        
+        for (let i = 0; i < mermaidBlocks.length; i++) {
+            const block = mermaidBlocks[i]
+            const mermaidCode = block.textContent
+            
+            try {
+                // 创建一个唯一的ID
+                const id = `mermaid-${Date.now()}-${i}`
+                
+                // 渲染mermaid图表
+                const { svg } = await mermaid.render(id, mermaidCode)
+                
+                // 创建一个div来包含SVG
+                const mermaidDiv = document.createElement('div')
+                mermaidDiv.className = 'mermaid-diagram'
+                mermaidDiv.innerHTML = svg
+                
+                // 替换原来的代码块
+                block.parentElement.replaceWith(mermaidDiv)
+            } catch (error) {
+                console.error('Mermaid rendering error:', error)
+                // 如果渲染失败，显示错误信息
+                const errorDiv = document.createElement('div')
+                errorDiv.className = 'mermaid-error'
+                errorDiv.innerHTML = `<p>Mermaid图表渲染错误:</p><pre>${mermaidCode}</pre>`
+                block.parentElement.replaceWith(errorDiv)
+            }
+        }
     }
 
     updateToc() {
@@ -559,6 +629,13 @@ $$
     toggleTheme() {
         this.isDarkMode = !this.isDarkMode
         this.applyTheme()
+        // 更新mermaid主题
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: this.isDarkMode ? 'dark' : 'default',
+            securityLevel: 'loose',
+            fontFamily: 'inherit'
+        })
         localStorage.setItem('darkMode', this.isDarkMode)
     }
 
