@@ -737,7 +737,7 @@ class MarkdownEditor {
     }
 
     getDefaultContent() {
-        return `# Markdown 转换工具
+        return `# Markdown 预览编辑转换工具
 
 欢迎使用这个功能强大的 Markdown 编辑器！
 
@@ -1758,6 +1758,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 编辑器初始化完成后，恢复标题文字
     const titleElement = document.querySelector('.app-title')
     if (titleElement) {
-        titleElement.textContent = 'Markdown 转换工具'
+        titleElement.textContent = 'Markdown 预览编辑转换工具'
     }
 })

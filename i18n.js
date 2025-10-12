@@ -2,7 +2,7 @@
 const translations = {
     'zh-CN': {
         // 应用标题
-        appTitle: 'Markdown 转换工具',
+        appTitle: 'Markdown 预览编辑转换工具',
         
         // 工具栏
         toolbar: {
@@ -80,7 +80,7 @@ const translations = {
         
         // SEO 元数据
         seo: {
-            title: 'Markdown 转换工具 - 在线 Markdown 编辑器和转换器',
+            title: 'Markdown 预览编辑转换工具 - 在线 Markdown 编辑器和转换器',
             description: '功能强大的在线 Markdown 编辑器，支持实时预览、多格式导出（HTML、PDF、PNG、JPG、WEBP）、数学公式渲染、代码高亮、目录生成等功能。',
             keywords: 'Markdown编辑器,在线编辑器,Markdown转换,PDF导出,图片导出,数学公式,代码高亮,实时预览',
             author: 'blackmady'
@@ -89,7 +89,7 @@ const translations = {
     
     'zh-TW': {
         // 應用標題
-        appTitle: 'Markdown 轉換工具',
+        appTitle: 'Markdown 預覽編輯轉換工具',
         
         // 工具欄
         toolbar: {
@@ -167,7 +167,7 @@ const translations = {
         
         // SEO 元數據
         seo: {
-            title: 'Markdown 轉換工具 - 線上 Markdown 編輯器和轉換器',
+            title: 'Markdown 預覽編輯轉換工具 - 線上 Markdown 編輯器和轉換器',
             description: '功能強大的線上 Markdown 編輯器，支援即時預覽、多格式匯出（HTML、PDF、PNG、JPG、WEBP）、數學公式渲染、程式碼高亮、目錄生成等功能。',
             keywords: 'Markdown編輯器,線上編輯器,Markdown轉換,PDF匯出,圖片匯出,數學公式,程式碼高亮,即時預覽',
             author: 'blackmady'
@@ -175,8 +175,8 @@ const translations = {
     },
     
     'en': {
-        // App Title
-        appTitle: 'Markdown Converter',
+        // Application Title
+        appTitle: 'Markdown Preview Edit Converter',
         
         // Toolbar
         toolbar: {
@@ -254,7 +254,7 @@ const translations = {
         
         // SEO Metadata
         seo: {
-            title: 'Markdown Converter - Online Markdown Editor and Converter',
+            title: 'Markdown Preview Edit Converter - Online Markdown Editor and Converter',
             description: 'Powerful online Markdown editor with real-time preview, multi-format export (HTML, PDF, PNG, JPG, WEBP), math formula rendering, code highlighting, and table of contents generation.',
             keywords: 'Markdown editor,online editor,Markdown converter,PDF export,image export,math formulas,code highlighting,real-time preview',
             author: 'blackmady'

@@ -1,5 +1,5 @@
 {
-  "name": "MD2IMG - Markdown转换工具",
+  "name": "MD2IMG - Markdown 预览编辑转换工具",
   "short_name": "MD2IMG",
   "description": "免费在线Markdown编辑器，支持实时预览、数学公式、代码高亮，可导出为HTML、PDF、PNG、JPG、WEBP格式。",
   "start_url": "/",
