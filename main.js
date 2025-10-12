@@ -837,6 +837,8 @@ sequenceDiagram
             securityLevel: 'loose',
             fontFamily: 'inherit'
         })
+        // 重新渲染预览内容以应用新主题到 Mermaid 图表
+        this.updatePreview()
         localStorage.setItem('darkMode', this.isDarkMode)
     }
 
