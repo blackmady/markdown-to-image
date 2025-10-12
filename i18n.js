@@ -49,7 +49,7 @@ const translations = {
         share: {
             title: '分享到',
             facebook: 'Facebook',
-            twitter: 'Twitter',
+            twitter: 'X',
             linkedin: 'LinkedIn',
             reddit: 'Reddit',
             weibo: '微博',
@@ -159,7 +159,7 @@ const translations = {
         share: {
             title: '分享到',
             facebook: 'Facebook',
-            twitter: 'Twitter',
+            twitter: 'X',
             linkedin: 'LinkedIn',
             reddit: 'Reddit',
             weibo: '微博',
@@ -269,7 +269,7 @@ const translations = {
         share: {
             title: 'Share to',
             facebook: 'Facebook',
-            twitter: 'Twitter',
+            twitter: 'X',
             linkedin: 'LinkedIn',
             reddit: 'Reddit',
             weibo: 'Weibo',

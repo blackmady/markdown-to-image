@@ -11,7 +11,7 @@ import { saveAs } from 'file-saver'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import mermaid from 'mermaid'
-import 'sharer.js'
+// import 'sharer.js' // 移除以避免重复事件绑定
 
 // 自定义通知系统
 class NotificationSystem {
@@ -614,30 +614,66 @@ class MarkdownEditor {
         const shareDropdown = shareBtn.parentElement
         const shareMenu = shareDropdown.querySelector('.share-menu')
         
-        // 鼠标悬停显示菜单
-        shareDropdown.addEventListener('mouseenter', () => {
+        // 移除已有的事件监听器（如果存在）
+        const existingMouseEnterHandler = shareDropdown._mouseEnterHandler
+        const existingMouseLeaveHandler = shareDropdown._mouseLeaveHandler
+        const existingClickHandler = shareMenu._clickHandler
+        
+        if (existingMouseEnterHandler) {
+            shareDropdown.removeEventListener('mouseenter', existingMouseEnterHandler)
+        }
+        if (existingMouseLeaveHandler) {
+            shareDropdown.removeEventListener('mouseleave', existingMouseLeaveHandler)
+        }
+        if (existingClickHandler) {
+            shareMenu.removeEventListener('click', existingClickHandler)
+        }
+        
+        // 创建新的事件处理器
+        const mouseEnterHandler = () => {
             shareDropdown.classList.add('active')
             // 更新分享链接
             this.updateShareUrls()
-        })
+        }
         
-        // 鼠标离开隐藏菜单
-        shareDropdown.addEventListener('mouseleave', () => {
+        const mouseLeaveHandler = () => {
             shareDropdown.classList.remove('active')
-        })
+        }
         
-        // 阻止菜单内部点击事件冒泡
-        shareMenu.addEventListener('click', (e) => {
+        const clickHandler = (e) => {
             e.stopPropagation()
-        })
+        }
+        
+        // 绑定新的事件监听器
+        shareDropdown.addEventListener('mouseenter', mouseEnterHandler)
+        shareDropdown.addEventListener('mouseleave', mouseLeaveHandler)
+        shareMenu.addEventListener('click', clickHandler)
+        
+        // 保存事件处理器引用以便后续移除
+        shareDropdown._mouseEnterHandler = mouseEnterHandler
+        shareDropdown._mouseLeaveHandler = mouseLeaveHandler
+        shareMenu._clickHandler = clickHandler
         
         // 设置分享平台按钮事件
         const sharePlatformBtns = shareMenu.querySelectorAll('.share-platform-btn')
         sharePlatformBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            // 移除已有的点击事件监听器
+            const existingHandler = btn._shareClickHandler
+            if (existingHandler) {
+                btn.removeEventListener('click', existingHandler)
+            }
+            
+            // 创建新的事件处理器
+            const shareClickHandler = (e) => {
                 e.preventDefault()
                 this.handleShare(btn)
-            })
+            }
+            
+            // 绑定新的事件监听器
+            btn.addEventListener('click', shareClickHandler)
+            
+            // 保存事件处理器引用
+            btn._shareClickHandler = shareClickHandler
         })
     }
 
@@ -669,7 +705,7 @@ class MarkdownEditor {
                 shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
                 break
             case 'twitter':
-                shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`
+                shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`
                 break
             case 'linkedin':
                 shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
