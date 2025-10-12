@@ -1,6 +1,6 @@
 {
   "name": "md2img",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A powerful Markdown to HTML/PDF/Image converter with live preview",
   "main": "index.html",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:prod": "vite build --mode production",
     "preview": "vite preview",
-    "deploy": "pnpm run build:prod && wrangler pages publish dist",
+    "deploy": "pnpm run build:prod && wrangler pages deploy dist",
     "version:patch": "node scripts/version-bump.js patch",
     "version:minor": "node scripts/version-bump.js minor",
     "version:major": "node scripts/version-bump.js major",
@@ -44,7 +44,6 @@
     "jspdf": "^2.5.1",
     "katex": "^0.16.23",
     "marked": "^11.1.1",
-    "mermaid": "^11.12.0",
-    "sharer.js": "^0.5.3"
+    "mermaid": "^11.12.0"
   }
 }
