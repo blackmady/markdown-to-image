@@ -537,17 +537,17 @@ class MarkdownEditor {
 
     setupLanguageSelector() {
         const languageBtn = document.getElementById('languageBtn')
-        const languageMenu = document.querySelector('.language-menu')
+        const languageSelector = languageBtn.parentElement
+        const languageMenu = languageSelector.querySelector('.language-menu')
         
-        // 切换语言菜单显示/隐藏
-        languageBtn.addEventListener('click', (e) => {
-            e.stopPropagation()
-            languageMenu.classList.toggle('show')
+        // 鼠标悬停显示菜单
+        languageSelector.addEventListener('mouseenter', () => {
+            languageSelector.classList.add('active')
         })
         
-        // 点击其他地方关闭菜单
-        document.addEventListener('click', () => {
-            languageMenu.classList.remove('show')
+        // 鼠标离开隐藏菜单
+        languageSelector.addEventListener('mouseleave', () => {
+            languageSelector.classList.remove('active')
         })
         
         // 语言选择事件
@@ -557,7 +557,7 @@ class MarkdownEditor {
                 if (typeof setLanguage === 'function') {
                     setLanguage(lang)
                 }
-                languageMenu.classList.remove('show')
+                languageSelector.classList.remove('active')
             }
         })
     }
@@ -614,18 +614,16 @@ class MarkdownEditor {
         const shareDropdown = shareBtn.parentElement
         const shareMenu = shareDropdown.querySelector('.share-menu')
         
-        // 点击分享按钮切换菜单显示
-        shareBtn.addEventListener('click', (e) => {
-            e.stopPropagation()
-            shareMenu.classList.toggle('show')
-            
+        // 鼠标悬停显示菜单
+        shareDropdown.addEventListener('mouseenter', () => {
+            shareDropdown.classList.add('active')
             // 更新分享链接
             this.updateShareUrls()
         })
         
-        // 点击页面其他地方隐藏菜单
-        document.addEventListener('click', () => {
-            shareMenu.classList.remove('show')
+        // 鼠标离开隐藏菜单
+        shareDropdown.addEventListener('mouseleave', () => {
+            shareDropdown.classList.remove('active')
         })
         
         // 阻止菜单内部点击事件冒泡
@@ -710,7 +708,7 @@ class MarkdownEditor {
             )
             
             // 隐藏分享菜单
-            document.querySelector('.share-menu').classList.remove('show')
+            document.querySelector('.share-dropdown').classList.remove('active')
             
             // 显示成功提示
             notify.success(t('share.success') || '分享链接已打开')
