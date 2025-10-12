@@ -23,7 +23,8 @@ const translations = {
             pdf: '导出 PDF',
             png: '导出 PNG',
             jpg: '导出 JPG',
-            webp: '导出 WEBP'
+            webp: '导出 WEBP',
+            markdown: '导出 Markdown'
         },
         
         // 目录
@@ -42,6 +43,13 @@ const translations = {
         preview: {
             title: '预览',
             syncScroll: '同步滚动'
+        },
+        
+        // 历史文档
+        history: {
+            title: '历史文档',
+            empty: '暂无历史文档',
+            delete: '删除'
         },
         
         // SEO 元数据
@@ -70,13 +78,14 @@ const translations = {
             theme: '切換主題'
         },
         
-        // 匯出選單
+        // 导出菜单
         export: {
             html: '匯出 HTML',
             pdf: '匯出 PDF',
             png: '匯出 PNG',
             jpg: '匯出 JPG',
-            webp: '匯出 WEBP'
+            webp: '匯出 WEBP',
+            markdown: '匯出 Markdown'
         },
         
         // 目錄
@@ -91,10 +100,17 @@ const translations = {
             wordWrap: '自動換行'
         },
         
-        // 預覽
+        // 预览
         preview: {
             title: '預覽',
             syncScroll: '同步捲動'
+        },
+        
+        // 历史文档
+        history: {
+            title: '歷史文檔',
+            empty: '暫無歷史文檔',
+            delete: '刪除'
         },
         
         // SEO 元數據
@@ -129,7 +145,8 @@ const translations = {
             pdf: 'Export PDF',
             png: 'Export PNG',
             jpg: 'Export JPG',
-            webp: 'Export WEBP'
+            webp: 'Export WEBP',
+            markdown: 'Export Markdown'
         },
         
         // Table of Contents
@@ -144,10 +161,17 @@ const translations = {
             wordWrap: 'Word Wrap'
         },
         
-        // Preview
+        // 预览
         preview: {
             title: 'Preview',
             syncScroll: 'Sync Scroll'
+        },
+        
+        // 历史文档
+        history: {
+            title: 'History',
+            empty: 'No history documents',
+            delete: 'Delete'
         },
         
         // SEO Metadata

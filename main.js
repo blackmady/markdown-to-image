@@ -21,6 +21,9 @@ class MarkdownEditor {
         this.syncScroll = true
         this.wordWrap = true
         this.currentFile = null
+        this.dbName = 'MarkdownEditorDB'
+        this.dbVersion = 1
+        this.db = null
         
         this.init()
     }
@@ -181,7 +184,8 @@ class MarkdownEditor {
         this.loadTheme()
         this.updatePreview()
         this.updateToc()
-        this.setupTocClickHandler() // 确保在初始化时设置目录点击处理器
+        this.setupTocClickHandler()
+        this.initIndexedDB()
     }
 
     setupEditor() {
@@ -294,6 +298,9 @@ class MarkdownEditor {
         // 导出功能
         this.setupExportMenu()
         
+        // 历史文档功能
+        this.setupHistoryMenu()
+        
         // 语言切换功能
         this.setupLanguageSelector()
         
@@ -354,6 +361,132 @@ class MarkdownEditor {
                 exportDropdown.classList.remove('active')
             }
         })
+    }
+
+    setupHistoryMenu() {
+        const historyBtn = document.getElementById('historyBtn')
+        const historyDropdown = historyBtn.parentElement
+        const historyMenu = historyDropdown.querySelector('.history-menu')
+        
+        // 鼠标悬停显示菜单并加载历史文档
+        historyDropdown.addEventListener('mouseenter', async () => {
+            historyDropdown.classList.add('active')
+            await this.loadHistoryList()
+        })
+        
+        // 鼠标离开隐藏菜单
+        historyDropdown.addEventListener('mouseleave', () => {
+            historyDropdown.classList.remove('active')
+        })
+        
+        // 阻止菜单内部点击事件冒泡
+        historyMenu.addEventListener('click', (e) => {
+            e.stopPropagation()
+        })
+    }
+
+    // 加载历史文档列表
+    async loadHistoryList() {
+        const historyList = document.getElementById('historyList')
+        
+        try {
+            const documents = await this.getDocumentsFromIndexedDB()
+            
+            if (documents.length === 0) {
+                historyList.innerHTML = '<div class="history-empty" data-i18n="history.empty">暂无保存的文档</div>'
+                return
+            }
+            
+            // 按更新时间倒序排列
+            documents.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+            
+            historyList.innerHTML = documents.map(doc => `
+                <div class="history-item" data-id="${doc.id}">
+                    <div class="history-item-title">${this.escapeHtml(doc.title)}</div>
+                    <div class="history-item-date">${this.formatDate(doc.updatedAt)}</div>
+                    <div class="history-item-actions">
+                        <button class="history-item-action load" onclick="window.markdownEditor.loadHistoryDocument(${doc.id})">加载</button>
+                        <button class="history-item-action delete" onclick="window.markdownEditor.deleteHistoryDocument(${doc.id})">删除</button>
+                    </div>
+                </div>
+            `).join('')
+            
+        } catch (error) {
+            console.error('加载历史文档失败:', error)
+            historyList.innerHTML = '<div class="history-empty">加载失败，请重试</div>'
+        }
+    }
+
+    // 加载历史文档
+    async loadHistoryDocument(id) {
+        try {
+            const document = await this.loadDocumentFromIndexedDB(id)
+            if (document) {
+                this.editor.dispatch({
+                    changes: {
+                        from: 0,
+                        to: this.editor.state.doc.length,
+                        insert: document.content
+                    }
+                })
+                this.updatePreview()
+                this.updateToc()
+                
+                // 隐藏历史菜单
+                document.querySelector('.history-dropdown').classList.remove('active')
+                
+                alert(`已加载文档: ${document.title}`)
+            }
+        } catch (error) {
+            console.error('加载文档失败:', error)
+            alert('加载文档失败，请重试')
+        }
+    }
+
+    // 删除历史文档
+    async deleteHistoryDocument(id) {
+        if (!confirm('确定要删除这个文档吗？')) {
+            return
+        }
+        
+        try {
+            await this.deleteDocumentFromIndexedDB(id)
+            await this.loadHistoryList() // 重新加载列表
+            alert('文档已删除')
+        } catch (error) {
+            console.error('删除文档失败:', error)
+            alert('删除文档失败，请重试')
+        }
+    }
+
+    // HTML转义
+    escapeHtml(text) {
+        const div = document.createElement('div')
+        div.textContent = text
+        return div.innerHTML
+    }
+
+    // 格式化日期
+    formatDate(date) {
+        const d = new Date(date)
+        const now = new Date()
+        const diff = now - d
+        
+        if (diff < 60000) { // 1分钟内
+            return '刚刚'
+        } else if (diff < 3600000) { // 1小时内
+            return `${Math.floor(diff / 60000)}分钟前`
+        } else if (diff < 86400000) { // 1天内
+            return `${Math.floor(diff / 3600000)}小时前`
+        } else if (diff < 604800000) { // 1周内
+            return `${Math.floor(diff / 86400000)}天前`
+        } else {
+            return d.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            })
+        }
     }
 
     setupMarked() {
@@ -764,11 +897,156 @@ sequenceDiagram
         reader.readAsText(file)
     }
 
-    saveFile() {
+    async saveFile() {
         const content = this.editor.state.doc.toString()
-        const filename = this.currentFile || 'document.md'
-        const blob = new Blob([content], { type: 'text/markdown' })
-        saveAs(blob, filename)
+        const title = this.extractTitle(content) || '未命名文档'
+        
+        try {
+            await this.saveToIndexedDB(title, content)
+            alert('文档已保存到本地存储')
+        } catch (error) {
+            console.error('保存失败:', error)
+            alert('保存失败，请重试')
+        }
+    }
+
+    // 从内容中提取标题
+    extractTitle(content) {
+        const lines = content.split('\n')
+        for (const line of lines) {
+            const trimmed = line.trim()
+            if (trimmed.startsWith('# ')) {
+                return trimmed.substring(2).trim()
+            }
+        }
+        return null
+    }
+
+    // 初始化IndexedDB
+    async initIndexedDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion)
+            
+            request.onerror = () => {
+                console.error('IndexedDB打开失败')
+                reject(request.error)
+            }
+            
+            request.onsuccess = () => {
+                this.db = request.result
+                resolve(this.db)
+            }
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result
+                
+                // 创建文档存储对象
+                if (!db.objectStoreNames.contains('documents')) {
+                    const store = db.createObjectStore('documents', { 
+                        keyPath: 'id', 
+                        autoIncrement: true 
+                    })
+                    store.createIndex('title', 'title', { unique: false })
+                    store.createIndex('createdAt', 'createdAt', { unique: false })
+                    store.createIndex('updatedAt', 'updatedAt', { unique: false })
+                }
+            }
+        })
+    }
+
+    // 保存文档到IndexedDB
+    async saveToIndexedDB(title, content) {
+        if (!this.db) {
+            await this.initIndexedDB()
+        }
+        
+        const transaction = this.db.transaction(['documents'], 'readwrite')
+        const store = transaction.objectStore('documents')
+        
+        const document = {
+            title: title,
+            content: content,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }
+        
+        return new Promise((resolve, reject) => {
+            const request = store.add(document)
+            
+            request.onsuccess = () => {
+                resolve(request.result)
+            }
+            
+            request.onerror = () => {
+                reject(request.error)
+            }
+        })
+    }
+
+    // 从IndexedDB获取所有文档
+    async getDocumentsFromIndexedDB() {
+        if (!this.db) {
+            await this.initIndexedDB()
+        }
+        
+        const transaction = this.db.transaction(['documents'], 'readonly')
+        const store = transaction.objectStore('documents')
+        
+        return new Promise((resolve, reject) => {
+            const request = store.getAll()
+            
+            request.onsuccess = () => {
+                resolve(request.result)
+            }
+            
+            request.onerror = () => {
+                reject(request.error)
+            }
+        })
+    }
+
+    // 从IndexedDB加载文档
+    async loadDocumentFromIndexedDB(id) {
+        if (!this.db) {
+            await this.initIndexedDB()
+        }
+        
+        const transaction = this.db.transaction(['documents'], 'readonly')
+        const store = transaction.objectStore('documents')
+        
+        return new Promise((resolve, reject) => {
+            const request = store.get(id)
+            
+            request.onsuccess = () => {
+                resolve(request.result)
+            }
+            
+            request.onerror = () => {
+                reject(request.error)
+            }
+        })
+    }
+
+    // 从IndexedDB删除文档
+    async deleteDocumentFromIndexedDB(id) {
+        if (!this.db) {
+            await this.initIndexedDB()
+        }
+        
+        const transaction = this.db.transaction(['documents'], 'readwrite')
+        const store = transaction.objectStore('documents')
+        
+        return new Promise((resolve, reject) => {
+            const request = store.delete(id)
+            
+            request.onsuccess = () => {
+                resolve()
+            }
+            
+            request.onerror = () => {
+                reject(request.error)
+            }
+        })
     }
 
     // 清理HTML内容，去除可能导致样式冲突的类名和属性
@@ -811,10 +1089,15 @@ sequenceDiagram
 
         try {
             switch (format) {
+                case 'markdown':
+                    const markdownContent = this.editor.state.doc.toString()
+                    const blob = new Blob([markdownContent], { type: 'text/markdown' })
+                    saveAs(blob, 'document.md')
+                    break
                 case 'html':
                     const htmlContent = previewElement.innerHTML
-                    const blob = new Blob([htmlContent], { type: 'text/html' })
-                    saveAs(blob, 'document.html')
+                    const htmlBlob = new Blob([htmlContent], { type: 'text/html' })
+                    saveAs(htmlBlob, 'document.html')
                     break
                 case 'pdf':
                     await this.exportPDF(previewElement)
@@ -1239,6 +1522,9 @@ sequenceDiagram
 document.addEventListener('DOMContentLoaded', () => {
     // 初始化编辑器
     const editor = new MarkdownEditor()
+    
+    // 将编辑器实例设置为全局变量，供历史菜单使用
+    window.markdownEditor = editor
     
     // 编辑器初始化完成后，恢复标题文字
     const titleElement = document.querySelector('.app-title')
