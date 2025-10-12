@@ -188,7 +188,7 @@
               id="historyBtn"
               class="toolbar-btn"
               title="历史文档"
-              data-i18n-title="toolbar.history"
+              data-i18n-title="history.title"
             >
               <svg
                 width="16"
@@ -618,9 +618,16 @@
     <script>
       // 页面加载完成后初始化国际化
       document.addEventListener("DOMContentLoaded", function () {
-        if (typeof initI18n === "function") {
-          initI18n();
+        // 等待i18n.js加载完成
+        function waitForI18n() {
+          if (typeof initI18n === "function") {
+            initI18n();
+          } else {
+            // 如果i18n.js还没加载完成，等待100ms后重试
+            setTimeout(waitForI18n, 100);
+          }
         }
+        waitForI18n();
       });
     </script>
   </body>
