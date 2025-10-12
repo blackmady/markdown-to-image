@@ -1,6 +1,6 @@
 {
   "name": "md2img",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A powerful Markdown to HTML/PDF/Image converter with live preview",
   "main": "index.html",
   "scripts": {
@@ -43,6 +43,7 @@
     "jspdf": "^2.5.1",
     "katex": "^0.16.23",
     "marked": "^11.1.1",
-    "mermaid": "^11.12.0"
+    "mermaid": "^11.12.0",
+    "sharer.js": "^0.5.3"
   }
 }

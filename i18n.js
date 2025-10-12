@@ -12,6 +12,7 @@ const translations = {
             openFile: '打开文件',
             saveFile: '保存文件',
             export: '导出',
+            share: '分享',
             githubStar: 'GitHub Star',
             language: '选择语言',
             theme: '切换主题',
@@ -41,6 +42,20 @@ const translations = {
             latexFraction: '分数',
             latexIntegral: '积分',
             latexMatrix: '矩阵'
+        },
+        
+        // 分享功能
+        share: {
+            title: '分享到',
+            facebook: 'Facebook',
+            twitter: 'Twitter',
+            linkedin: 'LinkedIn',
+            reddit: 'Reddit',
+            weibo: '微博',
+            qq: 'QQ空间',
+            telegram: 'Telegram',
+            whatsapp: 'WhatsApp',
+            success: '分享链接已打开'
         },
         
         // 导出菜单
@@ -106,6 +121,7 @@ const translations = {
             openFile: '開啟檔案',
             saveFile: '儲存檔案',
             export: '匯出',
+            share: '分享',
             githubStar: 'GitHub Star',
             language: '選擇語言',
             theme: '切換主題',
@@ -135,6 +151,20 @@ const translations = {
             latexFraction: '分數',
             latexIntegral: '積分',
             latexMatrix: '矩陣'
+        },
+
+                // 分享功能
+        share: {
+            title: '分享到',
+            facebook: 'Facebook',
+            twitter: 'Twitter',
+            linkedin: 'LinkedIn',
+            reddit: 'Reddit',
+            weibo: '微博',
+            qq: 'QQ空間',
+            telegram: 'Telegram',
+            whatsapp: 'WhatsApp',
+            success: '分享連結已開啟'
         },
         
         // 导出菜单
@@ -200,6 +230,7 @@ const translations = {
             openFile: 'Open File',
             saveFile: 'Save File',
             export: 'Export',
+            share: 'Share',
             githubStar: 'GitHub Star',
             language: 'Language',
             theme: 'Toggle Theme',
@@ -231,7 +262,21 @@ const translations = {
             latexMatrix: 'Matrix'
         },
         
-        // Export Menu
+        // Share functionality
+        share: {
+            title: 'Share to',
+            facebook: 'Facebook',
+            twitter: 'Twitter',
+            linkedin: 'LinkedIn',
+            reddit: 'Reddit',
+            weibo: 'Weibo',
+            qq: 'QQ Zone',
+            telegram: 'Telegram',
+            whatsapp: 'WhatsApp',
+            success: 'Share link opened'
+        },
+        
+        // Export menu
         export: {
             html: 'Export HTML',
             pdf: 'Export PDF',

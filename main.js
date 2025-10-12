@@ -11,6 +11,7 @@ import { saveAs } from 'file-saver'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import mermaid from 'mermaid'
+import 'sharer.js'
 
 // 自定义通知系统
 class NotificationSystem {
@@ -375,6 +376,9 @@ class MarkdownEditor {
         
         // 设置富文本编辑器工具栏
         this.setupEditorToolbar()
+        
+        // 设置分享功能
+        this.setupShareMenu()
     }
 
     // 设置富文本编辑器工具栏
@@ -603,6 +607,114 @@ class MarkdownEditor {
         historyMenu.addEventListener('click', (e) => {
             e.stopPropagation()
         })
+    }
+
+    setupShareMenu() {
+        const shareBtn = document.getElementById('shareBtn')
+        const shareDropdown = shareBtn.parentElement
+        const shareMenu = shareDropdown.querySelector('.share-menu')
+        
+        // 点击分享按钮切换菜单显示
+        shareBtn.addEventListener('click', (e) => {
+            e.stopPropagation()
+            shareMenu.classList.toggle('show')
+            
+            // 更新分享链接
+            this.updateShareUrls()
+        })
+        
+        // 点击页面其他地方隐藏菜单
+        document.addEventListener('click', () => {
+            shareMenu.classList.remove('show')
+        })
+        
+        // 阻止菜单内部点击事件冒泡
+        shareMenu.addEventListener('click', (e) => {
+            e.stopPropagation()
+        })
+        
+        // 设置分享平台按钮事件
+        const sharePlatformBtns = shareMenu.querySelectorAll('.share-platform-btn')
+        sharePlatformBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault()
+                this.handleShare(btn)
+            })
+        })
+    }
+
+    updateShareUrls() {
+        const currentUrl = window.location.href
+        const title = document.title
+        const description = document.querySelector('meta[name="description"]')?.content || '功能强大的在线 Markdown 编辑器'
+        
+        const shareBtns = document.querySelectorAll('.share-platform-btn')
+        shareBtns.forEach(btn => {
+            btn.setAttribute('data-url', currentUrl)
+            btn.setAttribute('data-title', title)
+            if (btn.getAttribute('data-sharer') === 'weibo') {
+                btn.setAttribute('data-desc', description)
+            }
+        })
+    }
+
+    handleShare(btn) {
+        const platform = btn.getAttribute('data-sharer')
+        const url = btn.getAttribute('data-url')
+        const title = btn.getAttribute('data-title')
+        const description = btn.getAttribute('data-desc') || document.querySelector('meta[name="description"]')?.content || '功能强大的在线 Markdown 编辑器'
+        
+        let shareUrl = ''
+        
+        switch (platform) {
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
+                break
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`
+                break
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
+                break
+            case 'reddit':
+                shareUrl = `https://reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`
+                break
+            case 'weibo':
+                shareUrl = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title + ' - ' + description)}`
+                break
+            case 'qq':
+                shareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}`
+                break
+            case 'telegram':
+                shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`
+                break
+            case 'whatsapp':
+                shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`
+                break
+            default:
+                console.warn('Unknown share platform:', platform)
+                return
+        }
+        
+        if (shareUrl) {
+            // 打开分享窗口
+            const width = 600
+            const height = 400
+            const left = (window.innerWidth - width) / 2
+            const top = (window.innerHeight - height) / 2
+            
+            window.open(
+                shareUrl,
+                'share',
+                `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
+            )
+            
+            // 隐藏分享菜单
+            document.querySelector('.share-menu').classList.remove('show')
+            
+            // 显示成功提示
+            notify.success(t('share.success') || '分享链接已打开')
+        }
     }
 
     // 加载历史文档列表

@@ -162,6 +162,92 @@ body {
     fill: var(--accent-color);
 }
 
+/* 分享按钮样式 */
+.share-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.share-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--accent-color);
+}
+
+.share-btn svg {
+    transition: all 0.2s ease;
+}
+
+.share-btn:hover svg {
+    stroke: var(--accent-color);
+}
+
+.share-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    min-width: 280px;
+    z-index: 1000;
+    display: none;
+    margin-top: 4px;
+}
+
+.share-menu.show {
+    display: block;
+}
+
+.share-platforms {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.share-platform-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.share-platform-btn:hover {
+    background-color: var(--bg-secondary);
+    transform: translateY(-1px);
+}
+
+.share-platform-btn svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
 /* GitHub Star 链接样式 */
 .github-star-link {
     display: flex;
