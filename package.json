@@ -1,6 +1,6 @@
 {
   "name": "md2img",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A powerful Markdown to HTML/PDF/Image converter with live preview",
   "main": "index.html",
   "scripts": {
@@ -14,7 +14,8 @@
     "version:major": "node scripts/version-bump.js major",
     "precommit": "node scripts/version-bump.js patch",
     "setup-hooks": "node scripts/setup-hooks.js",
-    "postinstall": "node scripts/setup-hooks.js"
+    "postinstall": "node scripts/setup-hooks.js",
+    "update-version-display": "node scripts/update-version-display.js"
   },
   "keywords": [
     "markdown",

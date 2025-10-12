@@ -45,6 +45,14 @@ function bumpVersion(type = 'patch') {
         
         console.log(`版本号已从 ${currentVersion} 更新到 ${newVersion}`);
         
+        // 更新HTML中显示的版本号
+        try {
+            const { execSync } = require('child_process');
+            execSync('node scripts/update-version-display.js', { stdio: 'inherit' });
+        } catch (error) {
+            console.warn('警告: 更新HTML版本号显示失败:', error.message);
+        }
+        
         return newVersion;
     } catch (error) {
         console.error('版本号更新失败:', error.message);
