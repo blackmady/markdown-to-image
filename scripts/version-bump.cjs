@@ -48,7 +48,7 @@ function bumpVersion(type = 'patch') {
         // 更新HTML中显示的版本号
         try {
             const { execSync } = require('child_process');
-            execSync('node scripts/update-version-display.js', { stdio: 'inherit' });
+            execSync('node scripts/update-version-display.cjs', { stdio: 'inherit' });
         } catch (error) {
             console.warn('警告: 更新HTML版本号显示失败:', error.message);
         }

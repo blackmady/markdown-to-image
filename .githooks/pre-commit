@@ -6,7 +6,7 @@
 echo "正在自动增加版本号..."
 
 # 执行版本号增加脚本
-node scripts/version-bump.js patch
+node scripts/version-bump.cjs patch
 
 # 检查脚本执行是否成功
 if [ $? -eq 0 ]; then

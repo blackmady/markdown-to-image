@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
-import fs from 'fs'
-import crypto from 'crypto'
+import { readFileSync } from 'fs'
+import { createHash } from 'crypto'
 
 export default defineConfig(({ command, mode }) => {
   // 加载环境变量
@@ -45,8 +45,8 @@ export default defineConfig(({ command, mode }) => {
         name: 'i18n-asset',
         generateBundle(options, bundle) {
           // 将 i18n.js 作为资源文件处理，添加指纹并放到assets目录
-          const i18nContent = fs.readFileSync('i18n.js', 'utf-8')
-          const hash = crypto.createHash('md5').update(i18nContent).digest('hex').slice(0, 8)
+          const i18nContent = readFileSync('i18n.js', 'utf-8')
+          const hash = createHash('md5').update(i18nContent).digest('hex').slice(0, 8)
           const fileName = `assets/i18n-${hash}.js`
           
           this.emitFile({
@@ -105,8 +105,8 @@ export default defineConfig(({ command, mode }) => {
       {
         name: 'inject-analytics',
         transformIndexHtml: {
-          enforce: 'post',
-          transform(html, ctx) {
+          order: 'post',
+          handler(html, ctx) {
             // 只在生产构建时注入统计代码
             if (ctx.bundle && env.VITE_ENABLE_ANALYTICS === 'true') {
               const clarityProjectId = env.VITE_CLARITY_PROJECT_ID || 'tO0gxOtnk7'
