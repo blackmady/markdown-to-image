@@ -12,6 +12,71 @@ import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import mermaid from 'mermaid'
 
+// 自定义通知系统
+class NotificationSystem {
+    constructor() {
+        this.container = document.getElementById('notificationContainer')
+        this.notifications = []
+    }
+
+    show(message, type = 'info', duration = 3000) {
+        const notification = document.createElement('div')
+        notification.className = `notification ${type}`
+        notification.textContent = message
+        
+        // 添加到容器
+        this.container.appendChild(notification)
+        this.notifications.push(notification)
+        
+        // 触发显示动画
+        setTimeout(() => {
+            notification.classList.add('show')
+        }, 10)
+        
+        // 自动隐藏
+        setTimeout(() => {
+            this.hide(notification)
+        }, duration)
+        
+        return notification
+    }
+    
+    hide(notification) {
+        notification.classList.remove('show')
+        notification.classList.add('hide')
+        
+        // 动画完成后移除元素
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification)
+            }
+            const index = this.notifications.indexOf(notification)
+            if (index > -1) {
+                this.notifications.splice(index, 1)
+            }
+        }, 300)
+    }
+    
+    success(message, duration = 3000) {
+        return this.show(message, 'success', duration)
+    }
+    
+    error(message, duration = 4000) {
+        return this.show(message, 'error', duration)
+    }
+    
+    warning(message, duration = 3500) {
+        return this.show(message, 'warning', duration)
+    }
+    
+    info(message, duration = 3000) {
+        return this.show(message, 'info', duration)
+    }
+}
+
+// 创建全局通知实例
+const notify = new NotificationSystem()
+
 class MarkdownEditor {
     constructor() {
         this.editor = null
@@ -438,11 +503,11 @@ class MarkdownEditor {
                     historyDropdown.classList.remove('active')
                 }
                 
-                alert(`已加载文档: ${doc.title}`)
+                notify.success(`已加载文档: ${doc.title}`)
             }
         } catch (error) {
             console.error('加载文档失败:', error)
-            alert('加载文档失败，请重试')
+            notify.error('加载文档失败，请重试')
         }
     }
 
@@ -455,10 +520,10 @@ class MarkdownEditor {
         try {
             await this.deleteDocumentFromIndexedDB(id)
             await this.loadHistoryList() // 重新加载列表
-            alert('文档已删除')
+            notify.success('文档已删除')
         } catch (error) {
             console.error('删除文档失败:', error)
-            alert('删除文档失败，请重试')
+            notify.error('删除文档失败，请重试')
         }
     }
 
@@ -906,10 +971,10 @@ sequenceDiagram
         
         try {
             await this.saveToIndexedDB(title, content)
-            alert('文档已保存到本地存储')
+            notify.success('文档已保存到本地存储')
         } catch (error) {
             console.error('保存失败:', error)
-            alert('保存失败，请重试')
+            notify.error('保存失败，请重试')
         }
     }
 
@@ -1086,7 +1151,7 @@ sequenceDiagram
         const previewElement = document.getElementById('preview')
         
         if (!previewElement) {
-            alert('预览内容为空，无法导出')
+            notify.warning('预览内容为空，无法导出')
             return
         }
 
@@ -1096,27 +1161,31 @@ sequenceDiagram
                     const markdownContent = this.editor.state.doc.toString()
                     const blob = new Blob([markdownContent], { type: 'text/markdown' })
                     saveAs(blob, 'document.md')
+                    notify.success('Markdown 文件导出成功')
                     break
                 case 'html':
                     const htmlContent = previewElement.innerHTML
                     const htmlBlob = new Blob([htmlContent], { type: 'text/html' })
                     saveAs(htmlBlob, 'document.html')
+                    notify.success('HTML 文件导出成功')
                     break
                 case 'pdf':
                     await this.exportPDF(previewElement)
+                    notify.success('PDF 文件导出成功')
                     break
                 case 'png':
                 case 'jpg':
                 case 'webp':
                     const imageFormat = format === 'jpg' ? 'jpeg' : format
                     await this.exportImage(previewElement, imageFormat)
+                    notify.success(`${format.toUpperCase()} 图片导出成功`)
                     break
                 default:
-                    alert('不支持的导出格式')
+                    notify.error('不支持的导出格式')
             }
         } catch (error) {
             console.error('导出失败:', error)
-            alert(`导出失败: ${error.message}`)
+            notify.error(`导出失败: ${error.message}`)
         }
     }
 

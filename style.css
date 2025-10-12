@@ -819,3 +819,67 @@ body {
 .fade-in {
     animation: fadeIn 0.3s ease;
 }
+
+/* 自定义通知系统 */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.notification {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: var(--text-primary);
+    font-size: 14px;
+    max-width: 400px;
+    word-wrap: break-word;
+    pointer-events: auto;
+    transform: translateY(-100px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification.hide {
+    transform: translateY(-100px);
+    opacity: 0;
+}
+
+.notification.success {
+    border-left: 4px solid #10b981;
+    background: var(--bg-primary);
+}
+
+.notification.error {
+    border-left: 4px solid #ef4444;
+    background: var(--bg-primary);
+}
+
+.notification.info {
+    border-left: 4px solid #3b82f6;
+    background: var(--bg-primary);
+}
+
+.notification.warning {
+    border-left: 4px solid #f59e0b;
+    background: var(--bg-primary);
+}
+
+/* 深色模式下的通知样式 */
+[data-theme="dark"] .notification {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
