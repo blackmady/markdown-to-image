@@ -5,3 +5,19 @@ pages_build_output_dir = "dist"
 # 生产环境配置
 [env.production]
 compatibility_date = "2024-01-01"
+
+# 注意：环境变量需要在 Cloudflare Pages 控制台中手动配置
+# 需要配置的环境变量：
+# - VITE_ENABLE_ANALYTICS: "true" 或 "false"
+# - VITE_CLARITY_PROJECT_ID: 你的 Clarity 项目ID
+
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability]
+enabled = false
+
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true

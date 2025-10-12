@@ -108,16 +108,22 @@ export default defineConfig(({ command, mode }) => {
           order: 'post',
           handler(html, ctx) {
             // 只在生产构建时注入统计代码
-            if (ctx.bundle && env.VITE_ENABLE_ANALYTICS === 'true') {
-              const clarityProjectId = env.VITE_CLARITY_PROJECT_ID || 'tO0gxOtnk7'
+            // 兼容 Cloudflare Pages 和本地环境变量
+            const enableAnalytics = env.VITE_ENABLE_ANALYTICS === 'true' || 
+                                  process.env.VITE_ENABLE_ANALYTICS === 'true'
+            
+            if (ctx.bundle && enableAnalytics) {
+              const clarityProjectId = env.VITE_CLARITY_PROJECT_ID || 
+                                     process.env.VITE_CLARITY_PROJECT_ID || 
+                                     'to0gxOtnk7'
               const analyticsScript = `
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "${clarityProjectId}");
-    </script>`
+                <script type="text/javascript">
+                    (function(c,l,a,r,i,t,y){
+                        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                    })(window, document, "clarity", "script", "${clarityProjectId}");
+                </script>`
               
               // 在 </head> 标签前插入统计代码
               return html.replace('</head>', `${analyticsScript}\n</head>`)
