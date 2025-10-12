@@ -3,8 +3,14 @@ import { readFileSync } from 'fs'
 import { createHash } from 'crypto'
 
 export default defineConfig(({ command, mode }) => {
-  // 加载环境变量
+  // 加载本地环境变量
   const env = loadEnv(mode, process.cwd(), '')
+  
+  // 创建兼容 Cloudflare Pages 的环境变量获取函数
+  const getEnvVar = (key) => {
+    // 优先使用 Cloudflare 注入的环境变量，然后是本地 .env 文件
+    return process.env[key] || env[key]
+  }
   
   return {
     base: './',
@@ -108,14 +114,12 @@ export default defineConfig(({ command, mode }) => {
           order: 'post',
           handler(html, ctx) {
             // 只在生产构建时注入统计代码
-            // 兼容 Cloudflare Pages 和本地环境变量
-            const enableAnalytics = env.VITE_ENABLE_ANALYTICS === 'true' || 
-                                  process.env.VITE_ENABLE_ANALYTICS === 'true'
+            // 使用兼容函数获取环境变量，优先 Cloudflare，后备本地 .env
+            const enableAnalytics = getEnvVar('VITE_ENABLE_ANALYTICS') === 'true'
             
             if (ctx.bundle && enableAnalytics) {
-              const clarityProjectId = env.VITE_CLARITY_PROJECT_ID || 
-                                     process.env.VITE_CLARITY_PROJECT_ID || 
-                                     'to0gxOtnk7'
+              const clarityProjectId = getEnvVar('VITE_CLARITY_PROJECT_ID') || 'to0gxOtnk7'
+              
               const analyticsScript = `
                 <script type="text/javascript">
                     (function(c,l,a,r,i,t,y){
