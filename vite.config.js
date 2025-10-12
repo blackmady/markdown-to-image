@@ -9,7 +9,9 @@ export default defineConfig(({ command, mode }) => {
   // 创建兼容 Cloudflare Pages 的环境变量获取函数
   const getEnvVar = (key) => {
     // 优先使用 Cloudflare 注入的环境变量，然后是本地 .env 文件
-    return evn?.[key] || process.env[key] || dEnv[key]
+    const value = process.env[key] || dEnv[key] || ''
+    console.log(`getEnvVar(${key}) = ${value}`)
+    return value
   }
   
   return {
