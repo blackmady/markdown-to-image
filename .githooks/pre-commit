@@ -10,8 +10,8 @@ node scripts/version-bump.js patch
 
 # 检查脚本执行是否成功
 if [ $? -eq 0 ]; then
-    # 将更新后的 package.json 添加到本次提交
-    git add package.json
+    # 将更新后的 package.json 和 index.html 添加到本次提交
+    git add package.json index.html
     echo "版本号已自动增加并添加到本次提交"
 else
     echo "版本号增加失败，提交被中止"
