@@ -14,7 +14,33 @@ const translations = {
             export: '导出',
             githubStar: 'GitHub Star',
             language: '选择语言',
-            theme: '切换主题'
+            theme: '切换主题',
+            // 富文本编辑器工具栏
+            bold: '粗体',
+            italic: '斜体',
+            strikethrough: '删除线',
+            inlineCode: '行内代码',
+            heading1: '一级标题',
+            heading2: '二级标题',
+            heading3: '三级标题',
+            unorderedList: '无序列表',
+            orderedList: '有序列表',
+            blockquote: '引用',
+            codeBlock: '代码块',
+            link: '链接',
+            image: '图片',
+            table: '表格',
+            mermaid: 'Mermaid 图表',
+            mermaidFlowchart: '流程图',
+            mermaidSequence: '序列图',
+            mermaidGantt: '甘特图',
+            mermaidPie: '饼图',
+            latex: 'LaTeX 公式',
+            latexInline: '行内公式',
+            latexBlock: '块级公式',
+            latexFraction: '分数',
+            latexIntegral: '积分',
+            latexMatrix: '矩阵'
         },
         
         // 导出菜单
@@ -75,7 +101,33 @@ const translations = {
             export: '匯出',
             githubStar: 'GitHub Star',
             language: '選擇語言',
-            theme: '切換主題'
+            theme: '切換主題',
+            // 富文本編輯器工具欄
+            bold: '粗體',
+            italic: '斜體',
+            strikethrough: '刪除線',
+            inlineCode: '行內程式碼',
+            heading1: '一級標題',
+            heading2: '二級標題',
+            heading3: '三級標題',
+            unorderedList: '無序清單',
+            orderedList: '有序清單',
+            blockquote: '引用',
+            codeBlock: '程式碼區塊',
+            link: '連結',
+            image: '圖片',
+            table: '表格',
+            mermaid: 'Mermaid 圖表',
+            mermaidFlowchart: '流程圖',
+            mermaidSequence: '序列圖',
+            mermaidGantt: '甘特圖',
+            mermaidPie: '圓餅圖',
+            latex: 'LaTeX 公式',
+            latexInline: '行內公式',
+            latexBlock: '區塊級公式',
+            latexFraction: '分數',
+            latexIntegral: '積分',
+            latexMatrix: '矩陣'
         },
         
         // 导出菜单
@@ -136,7 +188,33 @@ const translations = {
             export: 'Export',
             githubStar: 'GitHub Star',
             language: 'Language',
-            theme: 'Toggle Theme'
+            theme: 'Toggle Theme',
+            // Rich Text Editor Toolbar
+            bold: 'Bold',
+            italic: 'Italic',
+            strikethrough: 'Strikethrough',
+            inlineCode: 'Inline Code',
+            heading1: 'Heading 1',
+            heading2: 'Heading 2',
+            heading3: 'Heading 3',
+            unorderedList: 'Unordered List',
+            orderedList: 'Ordered List',
+            blockquote: 'Blockquote',
+            codeBlock: 'Code Block',
+            link: 'Link',
+            image: 'Image',
+            table: 'Table',
+            mermaid: 'Mermaid Diagram',
+            mermaidFlowchart: 'Flowchart',
+            mermaidSequence: 'Sequence Diagram',
+            mermaidGantt: 'Gantt Chart',
+            mermaidPie: 'Pie Chart',
+            latex: 'LaTeX Formula',
+            latexInline: 'Inline Formula',
+            latexBlock: 'Block Formula',
+            latexFraction: 'Fraction',
+            latexIntegral: 'Integral',
+            latexMatrix: 'Matrix'
         },
         
         // Export Menu
@@ -406,271 +484,3 @@ window.t = t;
 window.setLanguage = setLanguage;
 window.getCurrentLanguage = getCurrentLanguage;
 window.initI18n = initI18n;
-
-// 国际化配置文件
-const i18n = {
-    // 当前语言
-    currentLang: 'zh-CN',
-    
-    // 支持的语言列表
-    supportedLangs: {
-        'zh-CN': '简体中文',
-        'zh-TW': '繁體中文',
-        'en': 'English'
-    },
-    
-    // 翻译资源
-    translations: {
-        'zh-CN': {
-            // 页面标题和描述
-            pageTitle: 'Markdown转换工具 - 在线Markdown编辑器与导出工具 | MD2IMG',
-            pageDescription: '免费在线Markdown编辑器，支持实时预览、数学公式、代码高亮，可导出为HTML、PDF、PNG、JPG、WEBP格式。功能强大的Markdown转换工具，支持暗黑模式和目录导航。',
-            pageKeywords: 'Markdown编辑器,Markdown转换,在线编辑器,PDF导出,图片导出,数学公式,代码高亮,实时预览,暗黑模式,免费工具',
-            
-            // 工具栏
-            toolbar: {
-                newFile: '新建文件',
-                openFile: '打开文件',
-                saveFile: '保存文件',
-                export: '导出',
-                exportHtml: '导出为 HTML',
-                exportPdf: '导出为 PDF',
-                exportPng: '导出为 PNG',
-                exportJpg: '导出为 JPG',
-                exportWebp: '导出为 WEBP',
-                toggleTheme: '切换主题',
-                language: '语言'
-            },
-            
-            // 编辑器
-            editor: {
-                placeholder: '在此输入 Markdown 内容...',
-                wordCount: '字数统计',
-                lineCount: '行数',
-                cursorPosition: '光标位置'
-            },
-            
-            // 预览区域
-            preview: {
-                title: '预览',
-                loading: '加载中...',
-                empty: '暂无内容'
-            },
-            
-            // 目录
-            toc: {
-                title: '目录',
-                empty: '暂无目录'
-            },
-            
-            // 文件操作
-            file: {
-                newFileTitle: '新建文件',
-                openFileTitle: '打开文件',
-                saveFileTitle: '保存文件',
-                fileName: '文件名',
-                fileContent: '文件内容',
-                confirm: '确认',
-                cancel: '取消',
-                save: '保存',
-                open: '打开',
-                delete: '删除',
-                rename: '重命名'
-            },
-            
-            // 消息提示
-            messages: {
-                fileSaved: '文件已保存',
-                fileOpened: '文件已打开',
-                fileDeleted: '文件已删除',
-                fileRenamed: '文件已重命名',
-                exportSuccess: '导出成功',
-                exportError: '导出失败',
-                copySuccess: '复制成功',
-                copyError: '复制失败',
-                invalidFileName: '文件名不能为空',
-                fileExists: '文件已存在'
-            },
-            
-            // 按钮文本
-            buttons: {
-                ok: '确定',
-                cancel: '取消',
-                save: '保存',
-                delete: '删除',
-                edit: '编辑',
-                copy: '复制',
-                download: '下载'
-            }
-        },
-        
-        'zh-TW': {
-            // 頁面標題和描述
-            pageTitle: 'Markdown轉換工具 - 線上Markdown編輯器與匯出工具 | MD2IMG',
-            pageDescription: '免費線上Markdown編輯器，支援即時預覽、數學公式、程式碼高亮，可匯出為HTML、PDF、PNG、JPG、WEBP格式。功能強大的Markdown轉換工具，支援暗黑模式和目錄導航。',
-            pageKeywords: 'Markdown編輯器,Markdown轉換,線上編輯器,PDF匯出,圖片匯出,數學公式,程式碼高亮,即時預覽,暗黑模式,免費工具',
-            
-            // 工具列
-            toolbar: {
-                newFile: '新建檔案',
-                openFile: '開啟檔案',
-                saveFile: '儲存檔案',
-                export: '匯出',
-                exportHtml: '匯出為 HTML',
-                exportPdf: '匯出為 PDF',
-                exportPng: '匯出為 PNG',
-                exportJpg: '匯出為 JPG',
-                exportWebp: '匯出為 WEBP',
-                toggleTheme: '切換主題',
-                language: '語言'
-            },
-            
-            // 編輯器
-            editor: {
-                placeholder: '在此輸入 Markdown 內容...',
-                wordCount: '字數統計',
-                lineCount: '行數',
-                cursorPosition: '游標位置'
-            },
-            
-            // 預覽區域
-            preview: {
-                title: '預覽',
-                loading: '載入中...',
-                empty: '暫無內容'
-            },
-            
-            // 目錄
-            toc: {
-                title: '目錄',
-                empty: '暫無目錄'
-            },
-            
-            // 檔案操作
-            file: {
-                newFileTitle: '新建檔案',
-                openFileTitle: '開啟檔案',
-                saveFileTitle: '儲存檔案',
-                fileName: '檔案名稱',
-                fileContent: '檔案內容',
-                confirm: '確認',
-                cancel: '取消',
-                save: '儲存',
-                open: '開啟',
-                delete: '刪除',
-                rename: '重新命名'
-            },
-            
-            // 訊息提示
-            messages: {
-                fileSaved: '檔案已儲存',
-                fileOpened: '檔案已開啟',
-                fileDeleted: '檔案已刪除',
-                fileRenamed: '檔案已重新命名',
-                exportSuccess: '匯出成功',
-                exportError: '匯出失敗',
-                copySuccess: '複製成功',
-                copyError: '複製失敗',
-                invalidFileName: '檔案名稱不能為空',
-                fileExists: '檔案已存在'
-            },
-            
-            // 按鈕文字
-            buttons: {
-                ok: '確定',
-                cancel: '取消',
-                save: '儲存',
-                delete: '刪除',
-                edit: '編輯',
-                copy: '複製',
-                download: '下載'
-            }
-        },
-        
-        'en': {
-            // Page title and description
-            pageTitle: 'Markdown Converter - Online Markdown Editor & Export Tool | MD2IMG',
-            pageDescription: 'Free online Markdown editor with real-time preview, math formulas, code highlighting. Export to HTML, PDF, PNG, JPG, WEBP formats. Powerful Markdown conversion tool with dark mode and table of contents navigation.',
-            pageKeywords: 'Markdown editor,Markdown converter,online editor,PDF export,image export,math formulas,code highlighting,real-time preview,dark mode,free tool',
-            
-            // Toolbar
-            toolbar: {
-                newFile: 'New File',
-                openFile: 'Open File',
-                saveFile: 'Save File',
-                export: 'Export',
-                exportHtml: 'Export as HTML',
-                exportPdf: 'Export as PDF',
-                exportPng: 'Export as PNG',
-                exportJpg: 'Export as JPG',
-                exportWebp: 'Export as WEBP',
-                toggleTheme: 'Toggle Theme',
-                language: 'Language'
-            },
-            
-            // Editor
-            editor: {
-                placeholder: 'Enter Markdown content here...',
-                wordCount: 'Word Count',
-                lineCount: 'Line Count',
-                cursorPosition: 'Cursor Position'
-            },
-            
-            // Preview area
-            preview: {
-                title: 'Preview',
-                loading: 'Loading...',
-                empty: 'No content'
-            },
-            
-            // Table of contents
-            toc: {
-                title: 'Table of Contents',
-                empty: 'No headings'
-            },
-            
-            // File operations
-            file: {
-                newFileTitle: 'New File',
-                openFileTitle: 'Open File',
-                saveFileTitle: 'Save File',
-                fileName: 'File Name',
-                fileContent: 'File Content',
-                confirm: 'Confirm',
-                cancel: 'Cancel',
-                save: 'Save',
-                open: 'Open',
-                delete: 'Delete',
-                rename: 'Rename'
-            },
-            
-            // Messages
-            messages: {
-                fileSaved: 'File saved',
-                fileOpened: 'File opened',
-                fileDeleted: 'File deleted',
-                fileRenamed: 'File renamed',
-                exportSuccess: 'Export successful',
-                exportError: 'Export failed',
-                copySuccess: 'Copied successfully',
-                copyError: 'Copy failed',
-                invalidFileName: 'File name cannot be empty',
-                fileExists: 'File already exists'
-            },
-            
-            // Button text
-            buttons: {
-                ok: 'OK',
-                cancel: 'Cancel',
-                save: 'Save',
-                delete: 'Delete',
-                edit: 'Edit',
-                copy: 'Copy',
-                download: 'Download'
-            }
-        }
-    }
-};
-
-// 导出i18n对象
-window.i18n = i18n;

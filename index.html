@@ -322,14 +322,14 @@
       </div>
       <div class="editor-toolbar">
         <div class="toolbar-group">
-          <button class="editor-toolbar-btn" data-action="bold" title="粗体">
+          <button class="editor-toolbar-btn" data-action="bold" title="粗体" data-i18n-title="toolbar.bold">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M13.5,15.5H10V12.5H13.5A1.5,1.5 0 0,1 15,14A1.5,1.5 0 0,1 13.5,15.5M10,6.5H13A1.5,1.5 0 0,1 14.5,8A1.5,1.5 0 0,1 13,9.5H10M15.6,10.79C16.57,10.11 17.25,9.02 17.25,8C17.25,5.74 15.5,4 13.25,4H7V18H14.04C16.14,18 17.75,16.3 17.75,14.21C17.75,12.69 16.89,11.39 15.6,10.79Z"
               />
             </svg>
           </button>
-          <button class="editor-toolbar-btn" data-action="italic" title="斜体">
+          <button class="editor-toolbar-btn" data-action="italic" title="斜体" data-i18n-title="toolbar.italic">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z"
@@ -340,6 +340,7 @@
             class="editor-toolbar-btn"
             data-action="strikethrough"
             title="删除线"
+            data-i18n-title="toolbar.strikethrough"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -351,6 +352,7 @@
             class="editor-toolbar-btn"
             data-action="code"
             title="行内代码"
+            data-i18n-title="toolbar.inlineCode"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -363,13 +365,13 @@
         <div class="toolbar-divider"></div>
 
         <div class="toolbar-group">
-          <button class="editor-toolbar-btn" data-action="h1" title="一级标题">
+          <button class="editor-toolbar-btn" data-action="h1" title="一级标题" data-i18n-title="toolbar.heading1">
             H1
           </button>
-          <button class="editor-toolbar-btn" data-action="h2" title="二级标题">
+          <button class="editor-toolbar-btn" data-action="h2" title="二级标题" data-i18n-title="toolbar.heading2">
             H2
           </button>
-          <button class="editor-toolbar-btn" data-action="h3" title="三级标题">
+          <button class="editor-toolbar-btn" data-action="h3" title="三级标题" data-i18n-title="toolbar.heading3">
             H3
           </button>
         </div>
@@ -377,21 +379,21 @@
         <div class="toolbar-divider"></div>
 
         <div class="toolbar-group">
-          <button class="editor-toolbar-btn" data-action="ul" title="无序列表">
+          <button class="editor-toolbar-btn" data-action="ul" title="无序列表" data-i18n-title="toolbar.unorderedList">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z"
               />
             </svg>
           </button>
-          <button class="editor-toolbar-btn" data-action="ol" title="有序列表">
+          <button class="editor-toolbar-btn" data-action="ol" title="有序列表" data-i18n-title="toolbar.orderedList">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M7,13V11H21V13H7M7,19V17H21V19H7M7,7V5H21V7H7M3,8V5H2V4H4V8H3M2,17V16H5V20H2V19H4V18.5H3V17.5H4V17H2M4.25,10A0.75,0.75 0 0,1 5,10.75C5,10.95 4.92,11.14 4.79,11.27L3.12,13H5V14H2V13.08L4,11H2V10H4.25Z"
               />
             </svg>
           </button>
-          <button class="editor-toolbar-btn" data-action="quote" title="引用">
+          <button class="editor-toolbar-btn" data-action="quote" title="引用" data-i18n-title="toolbar.blockquote">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z"
@@ -402,6 +404,7 @@
             class="editor-toolbar-btn"
             data-action="codeblock"
             title="代码块"
+            data-i18n-title="toolbar.codeBlock"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -414,21 +417,21 @@
         <div class="toolbar-divider"></div>
 
         <div class="toolbar-group">
-          <button class="editor-toolbar-btn" data-action="link" title="链接">
+          <button class="editor-toolbar-btn" data-action="link" title="链接" data-i18n-title="toolbar.link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z"
               />
             </svg>
           </button>
-          <button class="editor-toolbar-btn" data-action="image" title="图片">
+          <button class="editor-toolbar-btn" data-action="image" title="图片" data-i18n-title="toolbar.image">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"
               />
             </svg>
           </button>
-          <button class="editor-toolbar-btn" data-action="table" title="表格">
+          <button class="editor-toolbar-btn" data-action="table" title="表格" data-i18n-title="toolbar.table">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M5,4H19A2,2 0 0,1 21,6V18A2,2 0 0,1 19,20H5A2,2 0 0,1 3,18V6A2,2 0 0,1 5,4M5,8V12H11V8H5M13,8V12H19V8H13M5,14V18H11V14H5M13,14V18H19V14H13Z"
@@ -444,6 +447,7 @@
             <button
               class="editor-toolbar-btn dropdown-btn"
               title="插入Mermaid图表"
+              data-i18n-title="toolbar.mermaid"
             >
               <svg
                 width="16"
@@ -458,16 +462,16 @@
               Mermaid
             </button>
             <div class="dropdown-menu">
-              <button class="dropdown-item" data-action="mermaid-flowchart">
+              <button class="dropdown-item" data-action="mermaid-flowchart" data-i18n="toolbar.mermaidFlowchart">
                 流程图
               </button>
-              <button class="dropdown-item" data-action="mermaid-sequence">
+              <button class="dropdown-item" data-action="mermaid-sequence" data-i18n="toolbar.mermaidSequence">
                 序列图
               </button>
-              <button class="dropdown-item" data-action="mermaid-gantt">
+              <button class="dropdown-item" data-action="mermaid-gantt" data-i18n="toolbar.mermaidGantt">
                 甘特图
               </button>
-              <button class="dropdown-item" data-action="mermaid-pie">
+              <button class="dropdown-item" data-action="mermaid-pie" data-i18n="toolbar.mermaidPie">
                 饼图
               </button>
             </div>
@@ -477,6 +481,7 @@
             <button
               class="editor-toolbar-btn dropdown-btn"
               title="插入LaTeX公式"
+              data-i18n-title="toolbar.latex"
             >
               <svg
                 width="16"
@@ -491,19 +496,19 @@
               LaTeX
             </button>
             <div class="dropdown-menu">
-              <button class="dropdown-item" data-action="latex-inline">
+              <button class="dropdown-item" data-action="latex-inline" data-i18n="toolbar.latexInline">
                 行内公式
               </button>
-              <button class="dropdown-item" data-action="latex-block">
+              <button class="dropdown-item" data-action="latex-block" data-i18n="toolbar.latexBlock">
                 块级公式
               </button>
-              <button class="dropdown-item" data-action="latex-fraction">
+              <button class="dropdown-item" data-action="latex-fraction" data-i18n="toolbar.latexFraction">
                 分数
               </button>
-              <button class="dropdown-item" data-action="latex-integral">
+              <button class="dropdown-item" data-action="latex-integral" data-i18n="toolbar.latexIntegral">
                 积分
               </button>
-              <button class="dropdown-item" data-action="latex-matrix">
+              <button class="dropdown-item" data-action="latex-matrix" data-i18n="toolbar.latexMatrix">
                 矩阵
               </button>
             </div>
