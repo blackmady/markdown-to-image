@@ -1,5 +1,5 @@
 # 静态资源优先处理 - 必须放在通配符规则之前
-/i18n.js    /i18n.js    200
+# 移除i18n.js重定向，因为现在它会被打包到assets目录
 /main.js    /main.js    200
 /style.css  /style.css  200
 /favicon.svg /favicon.svg 200

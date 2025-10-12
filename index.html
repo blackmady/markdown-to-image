@@ -79,8 +79,62 @@
       disabled
     />
 
-    <!-- 国际化脚本 -->
-    <script src="./i18n.js" defer></script>
+    <!-- 国际化脚本 - 动态加载 -->
+    <script>
+      // 动态加载i18n文件
+      (function() {
+        // 开发环境直接加载
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          // 检查是否为开发服务器（通过端口判断）
+          if (location.port === '5173' || location.port === '3000') {
+            const script = document.createElement('script');
+            script.src = './i18n.js';
+            script.defer = true;
+            document.head.appendChild(script);
+          } else {
+            // 生产环境构建后的本地测试
+            fetch('./manifest.json')
+              .then(response => response.json())
+              .then(manifest => {
+                const i18nFile = manifest['i18n.js'];
+                if (i18nFile) {
+                  const script = document.createElement('script');
+                  script.src = './' + i18nFile.file;
+                  script.defer = true;
+                  document.head.appendChild(script);
+                }
+              })
+              .catch(() => {
+                // 如果manifest加载失败，尝试直接加载
+                const script = document.createElement('script');
+                script.src = './i18n.js';
+                script.defer = true;
+                document.head.appendChild(script);
+              });
+          }
+        } else {
+          // 生产环境从manifest获取实际文件名
+          fetch('./manifest.json')
+            .then(response => response.json())
+            .then(manifest => {
+              const i18nFile = manifest['i18n.js'];
+              if (i18nFile) {
+                const script = document.createElement('script');
+                script.src = './' + i18nFile.file;
+                script.defer = true;
+                document.head.appendChild(script);
+              }
+            })
+            .catch(() => {
+              // 如果manifest加载失败，尝试直接加载
+              const script = document.createElement('script');
+              script.src = './i18n.js';
+              script.defer = true;
+              document.head.appendChild(script);
+            });
+        }
+      })();
+    </script>
 
     <!-- 结构化数据 - 将通过JavaScript动态更新 -->
     <script type="application/ld+json">
@@ -215,7 +269,7 @@
         </div>
         <div class="toolbar-center">
           <span class="app-title" data-i18n="appTitle">Markdown 预览编辑转换工具</span>
-          <span class="app-version">v1.0.6</span>
+          <span class="app-version">v1.0.7</span>
         </div>
         <div class="toolbar-right">
           <!-- 分享按钮 -->

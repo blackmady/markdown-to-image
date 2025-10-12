@@ -1,4 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
+import fs from 'fs'
+import crypto from 'crypto'
 
 export default defineConfig(({ command, mode }) => {
   // 加载环境变量
@@ -11,12 +13,16 @@ export default defineConfig(({ command, mode }) => {
       assetsDir: 'assets',
       rollupOptions: {
         input: {
-          main: 'index.html',
-          i18n: 'i18n.js'
+          main: 'index.html'
         },
         output: {
-          entryFileNames: (chunkInfo) => {
-            return chunkInfo.name === 'i18n' ? 'i18n.js' : 'assets/[name]-[hash].js'
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: (assetInfo) => {
+            // i18n.js 文件也放到 assets 目录并添加指纹
+            if (assetInfo.name === 'i18n.js') {
+              return 'assets/i18n-[hash].js'
+            }
+            return 'assets/[name]-[hash][extname]'
           },
           manualChunks: {
             codemirror: ['codemirror', '@codemirror/lang-markdown', '@codemirror/state', '@codemirror/view'],
@@ -35,6 +41,39 @@ export default defineConfig(({ command, mode }) => {
       open: true
     },
     plugins: [
+      {
+        name: 'i18n-asset',
+        generateBundle(options, bundle) {
+          // 将 i18n.js 作为资源文件处理，添加指纹并放到assets目录
+          const i18nContent = fs.readFileSync('i18n.js', 'utf-8')
+          const hash = crypto.createHash('md5').update(i18nContent).digest('hex').slice(0, 8)
+          const fileName = `assets/i18n-${hash}.js`
+          
+          this.emitFile({
+            type: 'asset',
+            fileName: fileName,
+            source: i18nContent
+          })
+          
+          // 创建manifest映射
+          if (!bundle['manifest.json']) {
+            bundle['manifest.json'] = {
+              type: 'asset',
+              fileName: 'manifest.json',
+              source: JSON.stringify({
+                'i18n.js': {
+                  file: fileName
+                }
+              }, null, 2)
+            }
+          } else {
+            // 如果manifest已存在，添加i18n映射
+            const manifest = JSON.parse(bundle['manifest.json'].source)
+            manifest['i18n.js'] = { file: fileName }
+            bundle['manifest.json'].source = JSON.stringify(manifest, null, 2)
+          }
+        }
+      },
       {
         name: 'process-manifest',
         generateBundle(options, bundle) {
