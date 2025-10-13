@@ -5,8 +5,8 @@ import { createHash } from 'crypto'
 export default defineConfig(({ command, mode }) => {
   // 加载本地环境变量
   const dEnv = loadEnv(mode, process.cwd(), '')
-  const enableAnalytics = process.env.VITE_ENABLE_ANALYTICS || dEnv['VITE_ENABLE_ANALYTICS'] || '';
-  const clarityProjectId = process.env.VITE_CLARITY_PROJECT_ID || dEnv['VITE_CLARITY_PROJECT_ID'] || '';
+  const enableAnalytics = process.env.ENABLE_ANALYTICS || dEnv['VITE_ENABLE_ANALYTICS'] || '';
+  const clarityProjectId = process.env.CLARITY_PROJECT_ID || dEnv['VITE_CLARITY_PROJECT_ID'] || '';
   console.log('enableAnalytics------', enableAnalytics)
   console.log('clarityProjectId-----', clarityProjectId)
   
