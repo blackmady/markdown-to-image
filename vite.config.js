@@ -115,12 +115,16 @@ export default defineConfig(({ command, mode }) => {
         transformIndexHtml: {
           order: 'post',
           handler(html, ctx) {
+            console.log('--------------------------------')
             // 只在生产构建时注入统计代码
             // 使用兼容函数获取环境变量，优先 Cloudflare，后备本地 .env
             const enableAnalytics = getEnvVar('VITE_ENABLE_ANALYTICS')
+            console.log('--------------------------------1', enableAnalytics)
             
             if (ctx.bundle && enableAnalytics) {
+              console.log('--------------------------------2', enableAnalytics)
               const clarityProjectId = getEnvVar('VITE_CLARITY_PROJECT_ID') || 'to0gxOtnk7'
+              console.log('--------------------------------3', clarityProjectId)
               
               const analyticsScript = `
                 <script type="text/javascript">
@@ -134,6 +138,7 @@ export default defineConfig(({ command, mode }) => {
               // 在 </head> 标签前插入统计代码
               return html.replace('</head>', `${analyticsScript}\n</head>`)
             }
+            console.log(html)
             return html
           }
         }
