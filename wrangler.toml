@@ -1,7 +1,0 @@
-name = "markdown-to-image"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
-
-# 生产环境配置
-[env.production]
-compatibility_date = "2024-01-01"
