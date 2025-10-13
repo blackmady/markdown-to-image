@@ -117,7 +117,7 @@ export default defineConfig(({ command, mode }) => {
           handler(html, ctx) {
             // 只在生产构建时注入统计代码
             // 使用兼容函数获取环境变量，优先 Cloudflare，后备本地 .env
-            const enableAnalytics = getEnvVar('VITE_ENABLE_ANALYTICS') === 'true'
+            const enableAnalytics = getEnvVar('VITE_ENABLE_ANALYTICS')
             
             if (ctx.bundle && enableAnalytics) {
               const clarityProjectId = getEnvVar('VITE_CLARITY_PROJECT_ID') || 'to0gxOtnk7'
