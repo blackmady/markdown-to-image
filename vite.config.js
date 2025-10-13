@@ -7,8 +7,6 @@ export default defineConfig(({ command, mode }) => {
   const dEnv = loadEnv(mode, process.cwd(), '')
   const enableAnalytics = process.env.ENABLE_ANALYTICS || dEnv['VITE_ENABLE_ANALYTICS'] || '';
   const clarityProjectId = process.env.CLARITY_PROJECT_ID || dEnv['VITE_CLARITY_PROJECT_ID'] || '';
-  console.log('enableAnalytics------', enableAnalytics)
-  console.log('clarityProjectId-----', clarityProjectId)
   
   return {
     base: './',
@@ -126,7 +124,6 @@ export default defineConfig(({ command, mode }) => {
               // 在 </head> 标签前插入统计代码
               return html.replace('</head>', `${analyticsScript}\n</head>`)
             }
-            console.log(html)
             return html
           }
         }
