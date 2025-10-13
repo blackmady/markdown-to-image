@@ -5,14 +5,10 @@ import { createHash } from 'crypto'
 export default defineConfig(({ command, mode }) => {
   // 加载本地环境变量
   const dEnv = loadEnv(mode, process.cwd(), '')
-  
-  // 创建兼容 Cloudflare Pages 的环境变量获取函数
-  const getEnvVar = (key) => {
-    // 优先使用 Cloudflare 注入的环境变量，然后是本地 .env 文件
-    const value = process.env[key] || dEnv[key] || ''
-    console.log(`getEnvVar(${key}) = ${value}`)
-    return value
-  }
+  const enableAnalytics = process.env.VITE_ENABLE_ANALYTICS || dEnv['VITE_ENABLE_ANALYTICS'] || '';
+  const clarityProjectId = process.env.VITE_CLARITY_PROJECT_ID || dEnv['VITE_CLARITY_PROJECT_ID'] || '';
+  console.log('enableAnalytics------', enableAnalytics)
+  console.log('clarityProjectId-----', clarityProjectId)
   
   return {
     base: './',
@@ -115,17 +111,9 @@ export default defineConfig(({ command, mode }) => {
         transformIndexHtml: {
           order: 'post',
           handler(html, ctx) {
-            console.log('--------------------------------')
             // 只在生产构建时注入统计代码
             // 使用兼容函数获取环境变量，优先 Cloudflare，后备本地 .env
-            const enableAnalytics = getEnvVar('VITE_ENABLE_ANALYTICS')
-            console.log('--------------------------------1', enableAnalytics)
-            
             if (ctx.bundle && enableAnalytics) {
-              console.log('--------------------------------2', enableAnalytics)
-              const clarityProjectId = getEnvVar('VITE_CLARITY_PROJECT_ID') || 'to0gxOtnk7'
-              console.log('--------------------------------3', clarityProjectId)
-              
               const analyticsScript = `
                 <script type="text/javascript">
                     (function(c,l,a,r,i,t,y){
