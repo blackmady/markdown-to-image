@@ -44,6 +44,21 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: [
       {
+        name: 'default-template-loader',
+        load(id) {
+          // 当导入 default_template.latest.md 时，返回其内容作为字符串
+          if (id.endsWith('default_template.latest.md')) {
+            try {
+              const content = readFileSync('default_template.latest.md', 'utf-8')
+              return `export default ${JSON.stringify(content)};`
+            } catch (error) {
+              console.warn('Failed to load default_template.latest.md:', error)
+              return `export default '';`
+            }
+          }
+        }
+      },
+      {
         name: 'i18n-asset',
         generateBundle(options, bundle) {
           // 将 i18n.js 作为资源文件处理，添加指纹并放到assets目录
@@ -109,6 +124,8 @@ export default defineConfig(({ command, mode }) => {
         transformIndexHtml: {
           order: 'post',
           handler(html, ctx) {
+            let processedHtml = html;
+            
             // 只在生产构建时注入统计代码
             // 使用兼容函数获取环境变量，优先 Cloudflare，后备本地 .env
             if (ctx.bundle && enableAnalytics) {
@@ -122,9 +139,9 @@ export default defineConfig(({ command, mode }) => {
                 </script>`
               
               // 在 </head> 标签前插入统计代码
-              return html.replace('</head>', `${analyticsScript}\n</head>`)
+              processedHtml = processedHtml.replace('</head>', `${analyticsScript}\n</head>`)
             }
-            return html
+            return processedHtml
           }
         }
       }
