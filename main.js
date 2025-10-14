@@ -681,15 +681,32 @@ class MarkdownEditor {
     updateShareUrls() {
         const currentUrl = window.location.href
         const title = document.title
-        const description = document.querySelector('meta[name="description"]')?.content || '功能强大的在线 Markdown 编辑器'
+        const baseDescription = document.querySelector('meta[name="description"]')?.content || '功能强大的在线 Markdown 编辑器'
+        
+        // 丰富的分享描述
+        const richDescription = `${baseDescription} 🚀 支持实时预览、多格式导出(HTML/PDF/图片)、数学公式、代码高亮、Mermaid图表、夜间模式多语言等功能`
+        
+        // 添加标签和特性
+        const features = [
+            '#Markdown编辑器',
+            '#在线工具', 
+            '#实时预览',
+            '#PDF导出',
+            '#图片导出',
+            '#AI时代必备',
+            '#数学公式',
+            '#免费工具',
+            '#开源项目'
+        ]
+        
+        const hashtags = features.join(' ')
         
         const shareBtns = document.querySelectorAll('.share-platform-btn')
         shareBtns.forEach(btn => {
             btn.setAttribute('data-url', currentUrl)
             btn.setAttribute('data-title', title)
-            if (btn.getAttribute('data-sharer') === 'weibo') {
-                btn.setAttribute('data-desc', description)
-            }
+            btn.setAttribute('data-desc', richDescription)
+            btn.setAttribute('data-hashtags', hashtags)
         })
     }
 
@@ -697,34 +714,46 @@ class MarkdownEditor {
         const platform = btn.getAttribute('data-sharer')
         const url = btn.getAttribute('data-url')
         const title = btn.getAttribute('data-title')
-        const description = btn.getAttribute('data-desc') || document.querySelector('meta[name="description"]')?.content || '功能强大的在线 Markdown 编辑器'
+        const description = btn.getAttribute('data-desc') || '功能强大的在线 Markdown 编辑器'
+        const hashtags = btn.getAttribute('data-hashtags') || ''
         
         let shareUrl = ''
+        let shareText = ''
         
         switch (platform) {
             case 'facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title + ' - ' + description)}`
                 break
             case 'twitter':
-                shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`
+                // Twitter/X 限制280字符，优化内容
+                shareText = `${title}\n\n${description}\n\n${hashtags}\n\n${url}`
+                if (shareText.length > 280) {
+                    const shortDesc = description.substring(0, 100) + '...'
+                    shareText = `${title}\n\n${shortDesc}\n\n${hashtags}\n\n${url}`
+                }
+                shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`
                 break
             case 'linkedin':
-                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(description)}`
                 break
             case 'reddit':
-                shareUrl = `https://reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`
+                shareUrl = `https://reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title + ' - ' + description)}`
                 break
             case 'weibo':
-                shareUrl = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title + ' - ' + description)}`
+                // 微博支持话题标签，优化格式
+                shareText = `${title}\n\n${description}\n\n${hashtags.replace(/#/g, '#')} ${url}`
+                shareUrl = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(shareText)}`
                 break
             case 'qq':
-                shareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}`
+                shareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description + '\n\n' + hashtags)}&summary=${encodeURIComponent(description)}`
                 break
             case 'telegram':
-                shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`
+                shareText = `*${title}*\n\n${description}\n\n${hashtags}\n\n${url}`
+                shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`
                 break
             case 'whatsapp':
-                shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`
+                shareText = `*${title}*\n\n${description}\n\n${hashtags}\n\n${url}`
+                shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`
                 break
             default:
                 console.warn('Unknown share platform:', platform)
