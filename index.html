@@ -272,7 +272,7 @@
         </div>
         <div class="toolbar-center">
           <span class="app-title" data-i18n="appTitle">Markdown 预览编辑转换工具</span>
-          <span class="app-version">v1.0.31</span>
+          <span class="app-version">v1.0.32</span>
         </div>
         <div class="toolbar-right">
           <!-- 分享按钮 -->
@@ -730,6 +730,31 @@
               <div id="preview" class="markdown-body"></div>
             </div>
           </div>
+        </div>
+      </div>
+      
+      <!-- 状态条 -->
+      <div class="status-bar" id="statusBar">
+        <div class="status-left">
+          <span class="status-item" id="statusPosition">
+            <span data-i18n="statusBar.position">位置</span>: 
+            <span id="statusLine">1</span>:<span id="statusColumn">1</span>
+          </span>
+          <span class="status-item" id="statusSelection" style="display: none;">
+            <span data-i18n="statusBar.selection">已选择</span>: 
+            <span id="statusSelectionCount">0</span>
+          </span>
+        </div>
+        <div class="status-right">
+          <span class="status-item" id="statusWordCount">
+            <span id="statusLines">0</span> <span data-i18n="statusBar.lines">行</span>, 
+            <span id="statusWords">0</span> <span data-i18n="statusBar.words">字</span>, 
+            <span id="statusCharacters">0</span> <span data-i18n="statusBar.characters">字符</span>
+          </span>
+          <span class="status-item" id="statusReadingTime">
+            <span data-i18n="statusBar.readingTime">阅读时间</span>: 
+            <span id="statusReadingTimeValue">0</span> <span data-i18n="statusBar.minutes">分钟</span>
+          </span>
         </div>
       </div>
     </div>

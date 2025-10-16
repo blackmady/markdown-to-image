@@ -244,6 +244,7 @@ class MarkdownEditor {
     }
 
     init() {
+        console.log('App initializing...') // 调试日志
         this.setupEditor()
         this.setupEventListeners()
         this.setupMarked()
@@ -253,20 +254,34 @@ class MarkdownEditor {
         this.updateToc()
         this.setupTocClickHandler()
         this.initIndexedDB()
+        console.log('App initialization complete') // 调试日志
     }
 
     setupEditor() {
         const editorElement = document.getElementById('editor')
-        
+
+        if (!editorElement) {
+            console.error('找不到编辑器容器 #editor')
+            return
+        }
+
+        const self = this // 保存this引用
+
+        // 创建更新监听器
+        const updateListener = EditorView.updateListener.of((update) => {
+            // 无条件调用状态栏更新
+            self.updateStatusBar()
+
+            if (update.docChanged) {
+                self.updatePreview()
+                self.updateToc()
+            }
+        })
+
         const extensions = [
             basicSetup,
             markdown(),
-            EditorView.updateListener.of((update) => {
-                if (update.docChanged) {
-                    this.updatePreview()
-                    this.updateToc()
-                }
-            }),
+            updateListener,
             EditorView.theme({
                 '&': {
                     height: '100%',
@@ -288,16 +303,24 @@ class MarkdownEditor {
             })
         ]
 
-        this.editor = new EditorView({
-            state: EditorState.create({
-                doc: this.getDefaultContent(),
-                extensions
-            }),
-            parent: editorElement
-        })
+        try {
+            this.editor = new EditorView({
+                state: EditorState.create({
+                    doc: this.getDefaultContent(),
+                    extensions
+                }),
+                parent: editorElement
+            })
+        } catch (error) {
+            console.error('创建EditorView失败:', error)
+            return
+        }
 
         // 设置滚动同步
         this.setupScrollSync()
+
+        // 初始化状态栏
+        this.updateStatusBar()
     }
 
     setupScrollSync() {
@@ -1058,6 +1081,87 @@ class MarkdownEditor {
         this.setupTocClickHandler()
     }
 
+    updateStatusBar() {
+        if (!this.editor) {
+            return
+        }
+
+        const content = this.editor.state.doc.toString()
+        const selection = this.editor.state.selection.main
+
+        // 获取光标位置信息
+        const cursorPos = selection.head
+        const line = this.editor.state.doc.lineAt(cursorPos)
+        const lineNumber = line.number
+        const columnNumber = cursorPos - line.from + 1
+
+        // 计算统计信息
+        const lines = content.split('\n').length
+        const words = content.trim() ? content.trim().split(/\s+/).length : 0
+        const characters = content.length
+
+        // 计算选中内容
+        const selectedText = selection.empty ? '' : content.slice(selection.from, selection.to)
+        const selectedLength = selectedText.length
+
+        // 计算阅读时间（假设每分钟阅读200个中文字符或300个英文单词）
+        const chineseChars = (content.match(/[\u4e00-\u9fa5]/g) || []).length
+        const englishWords = content.replace(/[\u4e00-\u9fa5]/g, '').trim().split(/\s+/).filter(word => word.length > 0).length
+        const readingTimeMinutes = Math.ceil((chineseChars / 200) + (englishWords / 300))
+
+        // 更新状态栏显示
+        const statusBar = document.querySelector('.status-bar')
+        if (!statusBar) {
+            return
+        }
+
+        // 直接通过ID查找元素
+        const statusLine = document.getElementById('statusLine')
+        const statusColumn = document.getElementById('statusColumn')
+        const statusLines = document.getElementById('statusLines')
+        const statusWords = document.getElementById('statusWords')
+        const statusCharacters = document.getElementById('statusCharacters')
+        const statusReadingTimeValue = document.getElementById('statusReadingTimeValue')
+        const statusSelectionCount = document.getElementById('statusSelectionCount')
+        const statusSelection = document.getElementById('statusSelection')
+
+        // 直接更新各个元素
+        if (statusLine) {
+            statusLine.textContent = lineNumber
+        }
+
+        if (statusColumn) {
+            statusColumn.textContent = columnNumber
+        }
+
+        if (statusLines) {
+            statusLines.textContent = lines
+        }
+
+        if (statusWords) {
+            statusWords.textContent = words
+        }
+
+        if (statusCharacters) {
+            statusCharacters.textContent = characters
+        }
+
+        if (statusReadingTimeValue) {
+            const timeText = readingTimeMinutes > 0 ? readingTimeMinutes : '< 1'
+            statusReadingTimeValue.textContent = timeText
+        }
+
+        // 处理选中内容显示
+        if (statusSelection && statusSelectionCount) {
+            if (selectedLength > 0) {
+                statusSelectionCount.textContent = selectedLength
+                statusSelection.style.display = 'inline'
+            } else {
+                statusSelection.style.display = 'none'
+            }
+        }
+    }
+
     toggleToc() {
         this.isTocVisible = !this.isTocVisible
         const tocSidebar = document.getElementById('tocSidebar')
@@ -1124,13 +1228,18 @@ class MarkdownEditor {
 
     updateEditorTheme() {
         const currentDoc = this.editor.state.doc
+        const self = this // 保存this引用
+
         const extensions = [
             basicSetup,
             markdown(),
             EditorView.updateListener.of((update) => {
+                // 无条件调用状态栏更新
+                self.updateStatusBar()
+
                 if (update.docChanged) {
-                    this.updatePreview()
-                    this.updateToc()
+                    self.updatePreview()
+                    self.updateToc()
                 }
             }),
             EditorView.theme({
@@ -1153,17 +1262,19 @@ class MarkdownEditor {
                 }
             })
         ]
-        
+
         if (this.isDarkMode) {
             extensions.push(oneDark)
         }
-        
+
         this.editor.setState(EditorState.create({
             doc: currentDoc,
             extensions
         }))
-        
+
         this.setupScrollSync()
+        // 主题更新后立即更新一次状态栏
+        this.updateStatusBar()
     }
 
     toggleSyncScroll() {

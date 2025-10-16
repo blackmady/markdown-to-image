@@ -101,6 +101,19 @@ const translations = {
             cancel: '取消'
         },
         
+        // 状态条
+        statusBar: {
+            lines: '行',
+            words: '字',
+            characters: '字符',
+            selection: '已选择',
+            position: '位置',
+            column: '列',
+            readingTime: '阅读时间',
+            minutes: '分钟',
+            seconds: '秒'
+        },
+        
         // SEO 元数据
         seo: {
             title: 'Markdown 预览编辑转换工具 - 在线 Markdown 编辑器和转换器',
@@ -211,6 +224,19 @@ const translations = {
             cancel: '取消'
         },
         
+        // 狀態條
+        statusBar: {
+            lines: '行',
+            words: '字',
+            characters: '字符',
+            selection: '已選擇',
+            position: '位置',
+            column: '列',
+            readingTime: '閱讀時間',
+            minutes: '分鐘',
+            seconds: '秒'
+        },
+        
         // SEO 元數據
         seo: {
             title: 'Markdown 預覽編輯轉換工具 - 線上 Markdown 編輯器和轉換器',
@@ -319,6 +345,19 @@ const translations = {
             overwriteConfirm: 'A document with the same title already exists. Do you want to overwrite it?',
             overwrite: 'Overwrite',
             cancel: 'Cancel'
+        },
+        
+        // Status Bar
+        statusBar: {
+            lines: 'Lines',
+            words: 'Words',
+            characters: 'Characters',
+            selection: 'Selected',
+            position: 'Position',
+            column: 'Col',
+            readingTime: 'Reading Time',
+            minutes: 'min',
+            seconds: 'sec'
         },
         
         // SEO Metadata
