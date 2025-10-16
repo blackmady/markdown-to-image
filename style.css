@@ -526,6 +526,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    padding-bottom: 24px; /* 为状态栏留出空间 */
 }
 
 /* 富文本编辑器工具栏 */
