@@ -91,7 +91,9 @@ class MarkdownEditor {
         this.dbName = 'MarkdownEditorDB'
         this.dbVersion = 1
         this.db = null
-        
+        this.previewUpdateTimer = null
+        this.previewUpdateDelay = 200 // 防抖延迟时间(毫秒)
+
         this.init()
     }
 
@@ -269,12 +271,14 @@ class MarkdownEditor {
 
         // 创建更新监听器
         const updateListener = EditorView.updateListener.of((update) => {
-            // 无条件调用状态栏更新
+            // 无条件调用状态栏更新（立即执行，不需要防抖）
             self.updateStatusBar()
 
             if (update.docChanged) {
-                self.updatePreview()
-                self.updateToc()
+                // 使用防抖处理预览更新，减少闪烁
+                self.debouncedUpdatePreview()
+                // TOC 更新也使用防抖
+                self.debouncedUpdateToc()
             }
         })
 
@@ -1081,6 +1085,36 @@ class MarkdownEditor {
         this.setupTocClickHandler()
     }
 
+    // 防抖更新预览
+    debouncedUpdatePreview() {
+        // 清除之前的定时器
+        if (this.previewUpdateTimer) {
+            clearTimeout(this.previewUpdateTimer)
+        }
+
+        // 设置新的定时器
+        this.previewUpdateTimer = setTimeout(() => {
+            this.updatePreview()
+        }, this.previewUpdateDelay)
+    }
+
+    // 防抖更新目录
+    debouncedUpdateToc() {
+        // TOC 更新可以共用同一个定时器，因为它们通常一起更新
+        // 实际的 updateToc 会在 updatePreview 之后的下一帧执行
+        if (this.previewUpdateTimer) {
+            clearTimeout(this.previewUpdateTimer)
+        }
+
+        this.previewUpdateTimer = setTimeout(() => {
+            this.updatePreview()
+            // 使用 requestAnimationFrame 来确保在下一帧更新 TOC
+            requestAnimationFrame(() => {
+                this.updateToc()
+            })
+        }, this.previewUpdateDelay)
+    }
+
     updateStatusBar() {
         if (!this.editor) {
             return
@@ -1234,12 +1268,14 @@ class MarkdownEditor {
             basicSetup,
             markdown(),
             EditorView.updateListener.of((update) => {
-                // 无条件调用状态栏更新
+                // 无条件调用状态栏更新（立即执行，不需要防抖）
                 self.updateStatusBar()
 
                 if (update.docChanged) {
-                    self.updatePreview()
-                    self.updateToc()
+                    // 使用防抖处理预览更新，减少闪烁
+                    self.debouncedUpdatePreview()
+                    // TOC 更新也使用防抖
+                    self.debouncedUpdateToc()
                 }
             }),
             EditorView.theme({
