@@ -343,14 +343,40 @@ body {
     border-radius: 6px;
     box-shadow: var(--shadow-lg);
     min-width: 250px;
-    max-width: 350px;
-    max-height: 400px;
+    max-width: min(350px, calc(100vw - 32px));
+    max-height: min(400px, calc(100vh - 120px));
     z-index: 1001;
     display: none;
     opacity: 0;
     transform: translateY(-5px);
     transition: opacity 0.2s ease, transform 0.2s ease;
     overflow: hidden;
+}
+
+/* 当弹窗可能超出左侧屏幕时，调整定位 */
+@media (max-width: 480px) {
+    .history-menu {
+        right: auto;
+        left: 0;
+        min-width: calc(100vw - 32px);
+        max-width: calc(100vw - 32px);
+    }
+}
+
+/* 使用JavaScript动态调整定位的备用样式 */
+.history-menu.align-left {
+    right: auto;
+    left: 0;
+}
+
+.history-menu.align-center {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+}
+
+.history-dropdown.active .history-menu.align-center {
+    transform: translateX(-50%) translateY(0);
 }
 
 .history-dropdown.active .history-menu {
@@ -405,6 +431,8 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    word-break: break-all;
+    max-width: 100%;
 }
 
 .history-item-date {

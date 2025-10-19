@@ -623,18 +623,50 @@ class MarkdownEditor {
         // 鼠标悬停显示菜单并加载历史文档
         historyDropdown.addEventListener('mouseenter', async () => {
             historyDropdown.classList.add('active')
+            this.adjustHistoryMenuPosition(historyMenu, historyDropdown)
             await this.loadHistoryList()
         })
         
         // 鼠标离开隐藏菜单
         historyDropdown.addEventListener('mouseleave', () => {
             historyDropdown.classList.remove('active')
+            // 清除定位类
+            historyMenu.classList.remove('align-left', 'align-center')
         })
         
         // 阻止菜单内部点击事件冒泡
         historyMenu.addEventListener('click', (e) => {
             e.stopPropagation()
         })
+    }
+
+    // 调整历史菜单位置，防止超出屏幕
+    adjustHistoryMenuPosition(menu, dropdown) {
+        // 重置所有定位类
+        menu.classList.remove('align-left', 'align-center')
+        
+        // 获取下拉按钮的位置信息
+        const dropdownRect = dropdown.getBoundingClientRect()
+        const menuWidth = 350 // 菜单的最大宽度
+        const screenWidth = window.innerWidth
+        const margin = 16 // 屏幕边缘的安全边距
+        
+        // 计算菜单右对齐时是否会超出左侧屏幕
+        const rightAlignedLeft = dropdownRect.right - menuWidth
+        
+        if (rightAlignedLeft < margin) {
+            // 如果右对齐会超出左侧，检查是否可以左对齐
+            const leftAlignedRight = dropdownRect.left + menuWidth
+            
+            if (leftAlignedRight <= screenWidth - margin) {
+                // 左对齐不会超出右侧，使用左对齐
+                menu.classList.add('align-left')
+            } else {
+                // 左右对齐都会超出，使用居中对齐
+                menu.classList.add('align-center')
+            }
+        }
+        // 如果右对齐不会超出，保持默认的右对齐（不添加任何类）
     }
 
     setupShareMenu() {

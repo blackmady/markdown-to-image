@@ -1,6 +1,6 @@
 {
   "name": "markdown-to-image",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "type": "module",
   "description": "A powerful Markdown to HTML/PDF/Image converter with live preview",
   "main": "index.html",
