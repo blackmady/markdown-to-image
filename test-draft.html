@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>草稿功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .danger {
+            background: #f44336;
+        }
+        .danger:hover {
+            background: #da190b;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background: #f2dede;
+            color: #a94442;
+        }
+        .info {
+            background: #d9edf7;
+            color: #31708f;
+        }
+    </style>
+</head>
+<body>
+    <h1>草稿功能测试页面</h1>
+
+    <div class="test-section">
+        <h2>1. 保存草稿测试</h2>
+        <button onclick="testSaveDraft()">保存测试草稿</button>
+        <div id="saveStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. 加载草稿测试</h2>
+        <button onclick="testLoadDraft()">加载草稿</button>
+        <div id="loadStatus"></div>
+        <pre id="draftContent"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>3. 检查草稿是否存在</h2>
+        <button onclick="checkDraft()">检查草稿</button>
+        <div id="checkStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. 清除草稿</h2>
+        <button class="danger" onclick="clearDraft()">清除草稿</button>
+        <div id="clearStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. localStorage 信息</h2>
+        <button onclick="showLocalStorage()">显示所有 localStorage</button>
+        <pre id="storageInfo"></pre>
+    </div>
+
+    <script>
+        const DRAFT_KEY = 'markdown-editor-draft';
+
+        function showStatus(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function testSaveDraft() {
+            try {
+                const testContent = `# 测试草稿\n\n这是一个测试草稿，创建时间：${new Date().toLocaleString()}\n\n## 测试内容\n\n- 项目 1\n- 项目 2\n- 项目 3`;
+                const draftData = {
+                    content: testContent,
+                    timestamp: new Date().toISOString(),
+                    wordCount: testContent.split(/\s+/).length
+                };
+                localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+                showStatus('saveStatus', '✓ 草稿保存成功！', 'success');
+            } catch (error) {
+                showStatus('saveStatus', `✗ 保存失败: ${error.message}`, 'error');
+            }
+        }
+
+        function testLoadDraft() {
+            try {
+                const draftString = localStorage.getItem(DRAFT_KEY);
+                if (draftString) {
+                    const draft = JSON.parse(draftString);
+                    document.getElementById('draftContent').textContent = JSON.stringify(draft, null, 2);
+                    showStatus('loadStatus', `✓ 草稿加载成功！时间：${new Date(draft.timestamp).toLocaleString()}`, 'success');
+                } else {
+                    showStatus('loadStatus', '✗ 未找到草稿', 'error');
+                    document.getElementById('draftContent').textContent = '';
+                }
+            } catch (error) {
+                showStatus('loadStatus', `✗ 加载失败: ${error.message}`, 'error');
+            }
+        }
+
+        function checkDraft() {
+            const draftString = localStorage.getItem(DRAFT_KEY);
+            if (draftString) {
+                try {
+                    const draft = JSON.parse(draftString);
+                    showStatus('checkStatus', `✓ 草稿存在！\n时间：${new Date(draft.timestamp).toLocaleString()}\n字数：${draft.wordCount}`, 'success');
+                } catch (error) {
+                    showStatus('checkStatus', '✗ 草稿数据格式错误', 'error');
+                }
+            } else {
+                showStatus('checkStatus', 'ℹ 不存在草稿', 'info');
+            }
+        }
+
+        function clearDraft() {
+            try {
+                localStorage.removeItem(DRAFT_KEY);
+                showStatus('clearStatus', '✓ 草稿已清除', 'success');
+                document.getElementById('draftContent').textContent = '';
+            } catch (error) {
+                showStatus('clearStatus', `✗ 清除失败: ${error.message}`, 'error');
+            }
+        }
+
+        function showLocalStorage() {
+            const storage = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                storage[key] = localStorage.getItem(key);
+            }
+            document.getElementById('storageInfo').textContent = JSON.stringify(storage, null, 2);
+        }
+
+        // 页面加载时自动检查
+        window.onload = function() {
+            checkDraft();
+        };
+    </script>
+</body>
+</html>

@@ -93,6 +93,9 @@ class MarkdownEditor {
         this.db = null
         this.previewUpdateTimer = null
         this.previewUpdateDelay = 200 // 防抖延迟时间(毫秒)
+        this.autosaveTimer = null
+        this.autosaveDelay = 2000 // 自动保存延迟时间(毫秒)
+        this.draftKey = 'markdown-editor-draft' // localStorage中的草稿键名
 
         this.init()
     }
@@ -279,6 +282,8 @@ class MarkdownEditor {
                 self.debouncedUpdatePreview()
                 // TOC 更新也使用防抖
                 self.debouncedUpdateToc()
+                // 自动保存草稿
+                self.debouncedAutosave()
             }
         })
 
@@ -383,6 +388,7 @@ class MarkdownEditor {
         document.getElementById('newFile').addEventListener('click', () => this.newFile())
         document.getElementById('openFile').addEventListener('click', () => this.openFile())
         document.getElementById('saveFile').addEventListener('click', () => this.saveFile())
+        document.getElementById('restoreDraft').addEventListener('click', () => this.handleRestoreDraft())
         document.getElementById('syncScroll').addEventListener('click', () => this.toggleSyncScroll())
         document.getElementById('wordWrap').addEventListener('click', () => this.toggleWordWrap())
         document.getElementById('closeToc').addEventListener('click', () => this.toggleToc())
@@ -395,18 +401,21 @@ class MarkdownEditor {
 
         // 设置语言选择器
         this.setupLanguageSelector()
-        
+
         // 设置导出菜单
         this.setupExportMenu()
-        
+
         // 设置历史菜单
         this.setupHistoryMenu()
-        
+
         // 设置富文本编辑器工具栏
         this.setupEditorToolbar()
-        
+
         // 设置分享功能
         this.setupShareMenu()
+
+        // 检查是否有草稿并显示恢复按钮
+        this.checkDraftOnStartup()
     }
 
     // 设置富文本编辑器工具栏
@@ -1147,6 +1156,137 @@ class MarkdownEditor {
         }, this.previewUpdateDelay)
     }
 
+    // 防抖自动保存草稿
+    debouncedAutosave() {
+        // 清除之前的自动保存定时器
+        if (this.autosaveTimer) {
+            clearTimeout(this.autosaveTimer)
+        }
+
+        // 设置新的定时器
+        this.autosaveTimer = setTimeout(() => {
+            this.saveDraft()
+        }, this.autosaveDelay)
+    }
+
+    // 保存草稿到 localStorage
+    saveDraft() {
+        try {
+            const content = this.editor.state.doc.toString()
+            const words = content.trim() ? content.trim().split(/\s+/).length : 0
+            const draftData = {
+                content: content,
+                timestamp: new Date().toISOString(),
+                wordCount: words
+            }
+            localStorage.setItem(this.draftKey, JSON.stringify(draftData))
+            console.log('草稿已自动保存', new Date().toLocaleTimeString())
+        } catch (error) {
+            console.error('保存草稿失败:', error)
+        }
+    }
+
+    // 加载草稿
+    loadDraft() {
+        try {
+            const draftString = localStorage.getItem(this.draftKey)
+            if (draftString) {
+                const draftData = JSON.parse(draftString)
+                return draftData
+            }
+        } catch (error) {
+            console.error('加载草稿失败:', error)
+        }
+        return null
+    }
+
+    // 清除草稿
+    clearDraft() {
+        try {
+            localStorage.removeItem(this.draftKey)
+            console.log('草稿已清除')
+        } catch (error) {
+            console.error('清除草稿失败:', error)
+        }
+    }
+
+    // 恢复草稿内容到编辑器
+    restoreDraft() {
+        const draft = this.loadDraft()
+        if (draft && draft.content) {
+            this.editor.dispatch({
+                changes: {
+                    from: 0,
+                    to: this.editor.state.doc.length,
+                    insert: draft.content
+                }
+            })
+            notify.success(window.t('draft.restored'))
+            return true
+        }
+        return false
+    }
+
+    // 处理恢复草稿按钮点击
+    handleRestoreDraft() {
+        const draft = this.loadDraft()
+        if (!draft || !draft.content) {
+            notify.warning(window.t('draft.notFound'))
+            return
+        }
+
+        // 检查当前编辑器是否有内容
+        const currentContent = this.editor.state.doc.toString().trim()
+        if (currentContent && currentContent !== this.getDefaultContent().trim()) {
+            // 如果有内容，询问用户是否覆盖
+            if (confirm(window.t('draft.confirmRestore'))) {
+                this.restoreDraft()
+                // 恢复后隐藏按钮
+                this.updateDraftButtonVisibility()
+            }
+        } else {
+            // 如果编辑器是空的或是默认内容，直接恢复
+            this.restoreDraft()
+            this.updateDraftButtonVisibility()
+        }
+    }
+
+    // 检查启动时是否有草稿
+    checkDraftOnStartup() {
+        const draft = this.loadDraft()
+        if (!draft || !draft.content) {
+            return
+        }
+
+        // 显示恢复草稿按钮
+        this.updateDraftButtonVisibility()
+
+        // 如果编辑器是默认内容，显示提示
+        const currentContent = this.editor.state.doc.toString().trim()
+        const defaultContent = this.getDefaultContent().trim()
+
+        if (currentContent === defaultContent) {
+            // 延迟显示通知，确保页面已完全加载
+            setTimeout(() => {
+                const draftTime = new Date(draft.timestamp).toLocaleString()
+                const message = window.t('draft.foundMessage', { time: draftTime })
+                notify.info(message, 5000)
+            }, 1000)
+        }
+    }
+
+    // 更新草稿按钮的可见性
+    updateDraftButtonVisibility() {
+        const restoreDraftBtn = document.getElementById('restoreDraft')
+        const draft = this.loadDraft()
+
+        if (draft && draft.content) {
+            restoreDraftBtn.style.display = 'inline-flex'
+        } else {
+            restoreDraftBtn.style.display = 'none'
+        }
+    }
+
     updateStatusBar() {
         if (!this.editor) {
             return
@@ -1308,6 +1448,8 @@ class MarkdownEditor {
                     self.debouncedUpdatePreview()
                     // TOC 更新也使用防抖
                     self.debouncedUpdateToc()
+                    // 自动保存草稿
+                    self.debouncedAutosave()
                 }
             }),
             EditorView.theme({

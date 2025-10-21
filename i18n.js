@@ -11,6 +11,7 @@ const translations = {
             newFile: '新建文件',
             openFile: '打开文件',
             saveFile: '保存文件',
+            restoreDraft: '恢复草稿',
             export: '导出',
             share: '分享',
             githubStar: 'GitHub Star',
@@ -100,7 +101,15 @@ const translations = {
             overwrite: '覆盖',
             cancel: '取消'
         },
-        
+
+        // 草稿功能
+        draft: {
+            restored: '草稿已恢复',
+            notFound: '未找到草稿',
+            confirmRestore: '当前编辑器有内容，恢复草稿将会覆盖当前内容。确定要恢复吗？',
+            foundMessage: '检测到上次保存的草稿（{time}），点击工具栏的"恢复草稿"按钮可恢复'
+        },
+
         // 状态条
         statusBar: {
             lines: '行',
@@ -134,6 +143,7 @@ const translations = {
             newFile: '新建檔案',
             openFile: '開啟檔案',
             saveFile: '儲存檔案',
+            restoreDraft: '恢復草稿',
             export: '匯出',
             share: '分享',
             githubStar: 'GitHub Star',
@@ -223,7 +233,15 @@ const translations = {
             overwrite: '覆蓋',
             cancel: '取消'
         },
-        
+
+        // 草稿功能
+        draft: {
+            restored: '草稿已恢復',
+            notFound: '未找到草稿',
+            confirmRestore: '當前編輯器有內容，恢復草稿將會覆蓋當前內容。確定要恢復嗎？',
+            foundMessage: '檢測到上次儲存的草稿（{time}），點擊工具欄的「恢復草稿」按鈕可恢復'
+        },
+
         // 狀態條
         statusBar: {
             lines: '行',
@@ -257,6 +275,7 @@ const translations = {
             newFile: 'New File',
             openFile: 'Open File',
             saveFile: 'Save File',
+            restoreDraft: 'Restore Draft',
             export: 'Export',
             share: 'Share',
             githubStar: 'GitHub Star',
@@ -346,7 +365,15 @@ const translations = {
             overwrite: 'Overwrite',
             cancel: 'Cancel'
         },
-        
+
+        // Draft functionality
+        draft: {
+            restored: 'Draft restored',
+            notFound: 'No draft found',
+            confirmRestore: 'The editor has content. Restoring the draft will overwrite current content. Continue?',
+            foundMessage: 'Draft from {time} detected. Click "Restore Draft" button in toolbar to restore'
+        },
+
         // Status Bar
         statusBar: {
             lines: 'Lines',
@@ -381,10 +408,10 @@ const languageNames = {
 };
 
 // 获取翻译文本
-function t(key) {
+function t(key, params = {}) {
     const keys = key.split('.');
     let value = translations[currentLanguage];
-    
+
     for (const k of keys) {
         if (value && typeof value === 'object') {
             value = value[k];
@@ -392,8 +419,19 @@ function t(key) {
             return key; // 如果找不到翻译，返回原始key
         }
     }
-    
-    return value || key;
+
+    // 如果没有找到值，返回key
+    if (!value) {
+        return key;
+    }
+
+    // 替换参数占位符
+    let result = value;
+    for (const [paramKey, paramValue] of Object.entries(params)) {
+        result = result.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), paramValue);
+    }
+
+    return result;
 }
 
 // 设置语言
